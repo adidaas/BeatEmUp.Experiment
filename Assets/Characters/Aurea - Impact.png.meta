@@ -1,0 +1,300 @@
+fileFormatVersion: 2
+guid: bb09c81c8d1f67241a6a689f83b7c992
+timeCreated: 1516210421
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Aurea - Impact_0
+    21300002: Aurea - Impact_1
+    21300004: Aurea - Impact_2
+    21300006: Aurea - Impact_3
+    21300008: Aurea - Impact_4
+    21300010: Aurea - Impact_5
+    21300012: Aurea - Impact_6
+    21300014: Aurea - Impact_7
+    21300016: Aurea - Impact_8
+    21300018: Aurea - Impact_9
+    21300020: Aurea - Impact_10
+    21300022: Aurea - Impact_11
+    21300024: Aurea - Impact_12
+    21300026: Aurea - Impact_13
+    21300028: Aurea - Impact_14
+    21300030: Aurea - Impact_15
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Aurea - Impact_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 6
+        width: 35
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5621814, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_1
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.69445926, y: 0.502429}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_2
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.65843, y: 0.49905598}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_3
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.7108114, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_4
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.8024679, y: 0.50000006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_5
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.7199763, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_6
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 6
+        width: 30
+        height: 64
+      alignment: 9
+      pivot: {x: 0.55193174, y: 0.49205798}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_7
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 6
+        width: 34
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_8
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 6
+        width: 40
+        height: 64
+      alignment: 9
+      pivot: {x: 0.32917634, y: 0.5010419}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_9
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 4
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.31946883, y: 0.5026038}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_10
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 5
+        width: 57
+        height: 64
+      alignment: 9
+      pivot: {x: 0.1725587, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_11
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 4
+        width: 54
+        height: 64
+      alignment: 9
+      pivot: {x: 0.20991516, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_12
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 5
+        width: 50
+        height: 64
+      alignment: 9
+      pivot: {x: 0.20670654, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_13
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 3
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.15, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_14
+      rect:
+        serializedVersion: 2
+        x: 666
+        y: 4
+        width: 42
+        height: 64
+      alignment: 9
+      pivot: {x: 0.12, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Aurea - Impact_15
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 4
+        width: 38
+        height: 64
+      alignment: 9
+      pivot: {x: 0.08, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
