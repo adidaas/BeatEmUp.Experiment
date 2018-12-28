@@ -15,7 +15,6 @@ public class PlayerHealth : MonoBehaviour {
 	[Range(0f, 1f)]
 	public float healthTargetDisplay;
 	public float maxHealth;
-	public float healthBarYOffset = 2;
 
 	void Start() {
 		healthTargetDisplay = healthTarget * 0.01f;

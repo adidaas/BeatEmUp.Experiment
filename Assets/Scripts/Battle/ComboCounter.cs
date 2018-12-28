@@ -17,14 +17,12 @@ public class ComboCounter : MonoBehaviour {
 	public GameObject specialMeterContainer;
 	private SpecialMeter specialMeter;
 
-	// Use this for initialization
 	void Start () {
 		comboCounterDisplay = comboCounter.GetComponent<UnityEngine.UI.Text>();
 		comboBarSlider = comboBarContainer.GetComponentInChildren<UnityEngine.UI.Slider>();
 		specialMeter = specialMeterContainer.GetComponent<SpecialMeter>();
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		if (comboTimer > 0f) {
             comboTimer -= 1 * Time.deltaTime ;
@@ -50,8 +48,7 @@ public class ComboCounter : MonoBehaviour {
 			if (comboBarSlider.value < 0.3f) {				
 				comboBarColor.color = Color.red;
 			}
-		}
-		
+		}		
 	}
 
 	public void IncrementComboCounter() {

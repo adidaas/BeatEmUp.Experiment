@@ -19,37 +19,11 @@ public class EnemyRenderObject : MonoBehaviour {
     // Movement speed in units/sec.
     public float speed = 1.0F;
 
-    // Time when the movement started.
-    private float startTime;
 
-    // Total distance between the markers.
-    private float journeyLength;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		// if (!isAnimationDone) 
-		// {
-		// 	// Distance moved = time * speed.
-        // float distCovered = (Time.time - startTime) * speed;
-
-        // // Fraction of journey completed = current distance divided by total distance.
-        // float fracJourney = distCovered / journeyLength;
-
-        // // Set our position as a fraction of the distance between the markers.
-        // transform.position = Vector3.Lerp(startMarker.position, endMarker, fracJourney);
-		// }
-	}
-
-	void HurtLaunch_MovePosition()
-	{		
+	void HurtLaunch_MovePosition() {		
 		currentStep = 0;
 		isAnimationDone = false;
-		//Debug.Log("Hurt launch move position ======================");
 
 		originalPosition = parentObject.transform.position;
 		var nextPosition = new Vector3 (parentObject.transform.position.x + 2, parentObject.transform.position.y + 5f, parentObject.transform.position.z);
@@ -57,22 +31,14 @@ public class EnemyRenderObject : MonoBehaviour {
 
 		enemyController = parentObject.GetComponent<EnemyController>();
 
-		// startMarker = parentObject.transform;
-		// endMarker = nextPosition;
-		
-		
-
 		// Keep a note of the time the movement started.
-        startTime = Time.time;
+        //startTime = Time.time;
 
         // Calculate the journey length.
         //journeyLength = Vector3.Distance(startMarker.position, endMarker);
 	}
 
-	void HurtLaunch_MovePosition_NextStep(Vector3 currentPosition)
-	{
-		// Debug.Log("^^^^^^^^^^^^^^ HurtLaunch_MovePosition_NextStep");
-		// Debug.Log("CurrentStep: " + currentStep);
+	void HurtLaunch_MovePosition_NextStep(Vector3 currentPosition) {
 		if (currentStep == 0) {
 			currentPosition = new Vector3 (currentPosition.x + 1.5f, currentPosition.y - 5f, currentPosition.z);
 			StartCoroutine (MoveOverSpeed (parentObject, currentPosition, 10f));
@@ -88,13 +54,10 @@ public class EnemyRenderObject : MonoBehaviour {
 			currentStep = 0;
 		}
 
-		currentStep++;
-
-		
+		currentStep++;		
 	}
 
-	public IEnumerator MoveOverSpeed (GameObject objectToMove, Vector3 end, float speed)
-	{		
+	public IEnumerator MoveOverSpeed (GameObject objectToMove, Vector3 end, float speed) {		
 		while (objectToMove.transform.position != end && !isAnimationDone) {
 			objectToMove.transform.position = 
 					//Vector3.Lerp(objectToMove.transform.position, end, speed * Time.deltaTime);
@@ -104,21 +67,18 @@ public class EnemyRenderObject : MonoBehaviour {
 		}
 
 		if (isAnimationDone == true) {
-			StartCoroutine(enemyController.ToggleHurtWakeUp((int)PlayerAttackEnums.AttacksHurtType.Launch));
+			StartCoroutine(enemyController.ToggleHurtWakeUp((int)GeneralEnums.AttacksHurtType.Launch));
 			
 		}
 		else {
 			HurtLaunch_MovePosition_NextStep(end);
-		}	
-		
+		}		
 	}
 
-	public IEnumerator MoveOverSeconds (GameObject objectToMove, Vector3 end, float seconds)
-	{
+	public IEnumerator MoveOverSeconds (GameObject objectToMove, Vector3 end, float seconds) {
 		float elapsedTime = 0;
 		Vector3 startingPos = objectToMove.transform.position;
-		while (elapsedTime < seconds)
-		{
+		while (elapsedTime < seconds) {
 			objectToMove.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
 			elapsedTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();

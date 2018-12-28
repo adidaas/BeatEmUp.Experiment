@@ -63,19 +63,15 @@ public class EnemyController : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator HurtKnockBack(float knockBackDistance)
-	{
-		
+	public IEnumerator HurtKnockBack(float knockBackDistance) {		
 		var endPosition = transform.position;
 		endPosition.x = endPosition.x + knockBackDistance;
-
 		while (transform.position != endPosition) {			
 			transform.position = 
 					Vector3.MoveTowards(transform.position, endPosition, 10f * Time.deltaTime);
 						
 			yield return new WaitForEndOfFrame ();
 		}
-
 	}
 
 	public float GetRecoveryTime(int hurtType) {
@@ -87,8 +83,7 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	#region Animator_SetNewPosition
-	void SetNewPosition()
-	{
+	void SetNewPosition() {
 		Debug.Log ("over here");
 		Debug.Log (myAnim.transform.position);
 		Debug.Log (gameObject.transform.position);
@@ -97,22 +92,8 @@ public class EnemyController : MonoBehaviour {
 	}
 	#endregion
 
-	#region Animator_ToggleHurtHigh
-	void ToggleHurtHigh()
-	{
-	}
-	#endregion
-
-	#region Animator_ToggleHurtHigh
-	// public void ToggleHurtWakeUp()
-	// {
-	// 	myAnim.SetTrigger(HurtTriggers.HurtWakeUp);
-	// }
-
-	public IEnumerator ToggleHurtWakeUp (int attackHurtType)
-	{
-		//Debug.Log("Toggle wakeup ---------------------------");
-		
+	#region Animator_ToggleHurtWakeUp
+	public IEnumerator ToggleHurtWakeUp (int attackHurtType) {
 		var seconds = GetRecoveryTime(attackHurtType);
 
 		float elapsedTime = 0;

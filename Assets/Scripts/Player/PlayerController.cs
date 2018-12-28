@@ -8,11 +8,18 @@ public class PlayerController : MonoBehaviour {
     #region Parameters
     public float moveSpeed;
     private float activeMoveSpeed;
+    private float runSpeed = 20f;
     public Rigidbody2D myRigidbody;
+    
+	public GameObject hitBox;
 	public HitCollider hitCollider;
+    public PlayerSpecialAttacks playerSpecialAttacks;
+
 
     public bool canDash;
     public bool canMove;
+    public bool canRun = false;
+    public bool isFacingRight = true;
 	public bool canGroundAttack;
 	public bool canAirAttack;
     private float buttonTapCooldown = 0f;
@@ -36,9 +43,9 @@ public class PlayerController : MonoBehaviour {
     public bool isGrounded;
     public bool isDashing;
     public bool isDashingRight;
+    public bool isRunning;
     public Animator myAnim;
 
-	public GameObject hitBox;
 
     public AudioSource soundSwing1;
     public AudioSource soundSwing2;
@@ -53,8 +60,7 @@ public class PlayerController : MonoBehaviour {
     public float currentHealth = 1.0f;
     #endregion
     
-	public static class MovementTriggerNames
-	{
+	public static class MovementTriggerNames {
 		// universal movements
         public static string MoveDash { get { return "move_Dash"; } }
 		public static string MoveJump { get { return "move_Jump"; } }
@@ -66,6 +72,7 @@ public class PlayerController : MonoBehaviour {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
 		hitCollider = hitBox.GetComponent<HitCollider>();
+        playerSpecialAttacks = GetComponent<PlayerSpecialAttacks>();
         activeMoveSpeed = moveSpeed;
 
         canDash = true;
@@ -81,8 +88,11 @@ public class PlayerController : MonoBehaviour {
         // debugging check
         if (Input.GetKeyDown(KeyCode.Slash)) {
             Debug.Log("canMove:" + canMove);
+            Debug.Log("canRun:" + canRun);            
+            Debug.Log("isDashing:" + isDashing);
             Debug.Log("canGroundAttack:" + canGroundAttack);
             Debug.Log("isAttacking:" + isAttacking);
+            Debug.Log("-------------");
             Debug.Log("comboRouteCooldown" + comboRouteCooldown);
             Debug.Log("currentComboRouteCount" + currentComboRouteCount);
         }
@@ -111,16 +121,51 @@ public class PlayerController : MonoBehaviour {
                 canGroundAttack = false;
                 buttonCount = 0;
                 isDashingRight = (Input.GetAxisRaw("Horizontal") > 0f) ? true : false;
+                myAnim.SetBool("IsDashing", true);
                 myAnim.SetTrigger(MovementTriggerNames.MoveDash);
 
                 StartCoroutine(MoveDash());
             }
         }
 
+        if (canRun) {
+            if (Input.GetAxisRaw("Horizontal") > 0f) {
+                // input run right
+                myAnim.SetBool("IsRunning", true);
+                isRunning = true;
+                isDashing  = false;
+                myAnim.SetBool("IsWalking", false);
+                myAnim.SetBool("IsDashing", false);
+                myRigidbody.velocity = new Vector3(runSpeed, myRigidbody.velocity.y, 0f);
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                isFacingRight = true;
+            }
+            else if (Input.GetAxisRaw("Horizontal") < 0f) {
+                // input run left
+                myAnim.SetBool("IsRunning", true);
+                isRunning = true;
+                isDashing  = false;
+                myAnim.SetBool("IsWalking", false);
+                myAnim.SetBool("IsDashing", false);
+                myRigidbody.velocity = new Vector3(-runSpeed, myRigidbody.velocity.y, 0f);
+                transform.localScale = new Vector3(-1f, 1f, 1f);
+                isFacingRight = false;
+            }
+            else {
+                // idle
+                myAnim.SetBool("IsWalking", false);                
+                myAnim.SetBool("IsRunning", false);
+                myAnim.SetBool("IsDashing", false);
+                isRunning = false;
+                canMove = true;
+                canRun = false;
+                myRigidbody.velocity = new Vector3(0f, myRigidbody.velocity.y, 0f);
+            }
+        }
+
 
         #region Movement
-        if (canMove && !isAttacking) {            
-
+        if (canMove && !isAttacking) {  
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) 
                 || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)) {
                 if (Input.GetKeyDown(KeyCode.D)) {
@@ -154,24 +199,27 @@ public class PlayerController : MonoBehaviour {
             if (Input.GetAxisRaw("Horizontal") > 0f) {
                 // input walk right
                 myAnim.SetBool("IsWalking", true);
+                myAnim.SetBool("IsRunning", false);
                 myRigidbody.velocity = new Vector3(activeMoveSpeed, myRigidbody.velocity.y, 0f);
                 transform.localScale = new Vector3(1f, 1f, 1f);
+                isFacingRight = true;
             }
             else if (Input.GetAxisRaw("Horizontal") < 0f) {
                 // input walk left
                 myAnim.SetBool("IsWalking", true);
                 myRigidbody.velocity = new Vector3(-activeMoveSpeed, myRigidbody.velocity.y, 0f);
                 transform.localScale = new Vector3(-1f, 1f, 1f);
+                isFacingRight = false;
             }
             else {
                 // idle
                 myAnim.SetBool("IsWalking", false);                
+                myAnim.SetBool("IsRunning", false);
                 myRigidbody.velocity = new Vector3(0f, myRigidbody.velocity.y, 0f);
             }
             
             // input jump            
-            //if (Input.GetButtonDown("Jump") && isGrounded)
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow)&& isGrounded)
             {
                 //myAnim.SetBool("IsGrounded", false);
                 canGroundAttack = false;
@@ -199,7 +247,7 @@ public class PlayerController : MonoBehaviour {
                 canMove = false;
                 myAnim.SetBool("IsAttacking", true);
                 if (currentComboRouteCount == 0) {                
-                    SetHitCollider(PlayerAttackEnums.RyuAttacks.Jab);
+                    BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Jab);
                     //soundSwing1.Play();
                     myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackJab);
                     comboRouteCooldown = 0.62f;
@@ -207,75 +255,20 @@ public class PlayerController : MonoBehaviour {
                     currentComboRouteType = (int)PlayerAttackEnums.ComboRouteTypes.AAA;
                 }
                 else if (currentComboRouteCount == 1 && comboRouteCooldown > 0f) {
-                    SetHitCollider(PlayerAttackEnums.RyuAttacks.Short);
+                    BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Short);
                     //soundSwing2.Play();
                     myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackShort);
                     comboRouteCooldown = 0.5f;
                     currentComboRouteCount++;
                 }
                 else if (currentComboRouteCount == 2 && comboRouteCooldown > 0f) {
-                    SetHitCollider(PlayerAttackEnums.RyuAttacks.Strong);
+                    BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Strong);
                     //soundSwing3.Play();
                     myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackStrong);
                     currentComboRouteCount = 0;
                     comboRouteCooldown = 0f;
                 }
                 
-            }
-            // else if (Input.GetKeyDown(KeyCode.DownArrow))
-            else if (5 == 6)
-            {
-                if (!isDashing) {
-                    myRigidbody.velocity = new Vector3(0f, myRigidbody.velocity.y, 0f);
-                }
-                isAttacking = true;
-                canMove = false;
-
-                myAnim.SetBool("IsAttacking", true);
-                SetHitCollider(PlayerAttackEnums.RyuAttacks.Short);
-
-                //AttackStart(attackHitboxes[1]);
-                //soundSwing2.Play();
-
-                //myAnim.SetTrigger(AttackTriggerNames.AttackHighKick);
-                myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackShort);
-
-            }
-            //else if (Input.GetKeyDown(KeyCode.UpArrow))
-            else if (5 == 6)
-            {
-                if (!isDashing) {
-                    myRigidbody.velocity = new Vector3(0f, myRigidbody.velocity.y, 0f);
-                }
-                isAttacking = true;
-                canMove = false;
-
-                myAnim.SetBool("IsAttacking", true);
-                SetHitCollider(PlayerAttackEnums.RyuAttacks.Strong);
-
-                //AttackStart(attackHitboxes[2]);
-                //soundSwing3.Play();
-
-                myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackStrong);
-            }
-            //else if (Input.GetKeyDown(KeyCode.RightArrow))
-            else if (5 == 6)
-            {
-                if (!isDashing) {
-                    myRigidbody.velocity = new Vector3(0f, myRigidbody.velocity.y, 0f);
-                }
-                
-                isAttacking = true;
-                canMove = false;
-
-                myAnim.SetBool("IsAttacking", true);
-
-                SetHitCollider(PlayerAttackEnums.RyuAttacks.Forward);
-
-                //AttackStart(attackHitboxes[2]);
-                //soundSwing3.Play();
-
-                myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.AttackForward);
             }
 
             // special attacks
@@ -284,28 +277,28 @@ public class PlayerController : MonoBehaviour {
                 isAttacking = true;
                 canMove = false;
                 myAnim.SetBool("IsAttacking", true);
-                SetHitCollider(PlayerAttackEnums.RyuAttacks.Shoryuken);
+                BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Shoryuken);
                 myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.SpecialShoryuken);
             }
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) {                    
+            else if (buttonTapCooldown > 0 && ( currentMovementKey == KeyCode.D || currentMovementKey == KeyCode.A ) && Input.GetKeyDown(KeyCode.UpArrow)) {                    
                 isAttacking = true;
                 canMove = false;
                 myAnim.SetBool("IsAttacking", true);
-                SetHitCollider(PlayerAttackEnums.RyuAttacks.Hadouken);
+                BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Tatsumaki);
+                myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.SpecialTatsumaki);
+
+                playerSpecialAttacks.InitializeRyuSpecialAttack((int)PlayerAttackEnums.RyuAttacks.Tatsumaki, isFacingRight);                
+            }
+            else if (buttonTapCooldown <= 0 && Input.GetKeyDown(KeyCode.UpArrow) && currentMovementKey != KeyCode.D && currentMovementKey != KeyCode.A && currentMovementKey != KeyCode.W) {                    
+                isAttacking = true;
+                canMove = false;
+                myAnim.SetBool("IsAttacking", true);                
                 myAnim.SetTrigger(PlayerAttackEnums.AttackTriggerNames.SpecialHadouken);
+
+                playerSpecialAttacks.InitializeRyuSpecialAttack((int)PlayerAttackEnums.RyuAttacks.Hadouken, isFacingRight);                
             }
         }
         
-
-        //if (Input.GetKeyDown(KeyCode.F))
-        //{
-        //    myAnim.SetBool("IsAttacking", true);
-        //    Debug.Log("special1");
-        //    //AttackStart(attackHitboxes[2]);
-        //    //soundSwing3.Play();
-
-        //    myAnim.SetTrigger(AttackTriggerNames.AttackImpact);
-        //}
         #endregion
 
         myAnim.SetFloat("Speed", Mathf.Abs(myRigidbody.velocity.x));
@@ -324,8 +317,7 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region Move Dash
-    public IEnumerator MoveDash()
-    {
+    public IEnumerator MoveDash() {
         var direction = isDashingRight ? 4f : -4F; 
 
         var endPosition = new Vector3(transform.position.x + direction, transform.position.y, transform.position.z);        
@@ -336,64 +328,6 @@ public class PlayerController : MonoBehaviour {
 					
 			yield return new WaitForEndOfFrame ();
 		}
-
-    }
-    #endregion
-
-    #region Set Hit Collider
-    private void SetHitCollider(PlayerAttackEnums.RyuAttacks attackType)
-    {
-        if (PlayerAttackEnums.RyuAttacks.Jab == attackType) {
-            hitCollider.attackName = "Jab";
-            hitCollider.attackSound = soundHit4;
-            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Jab;
-            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Jab;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)PlayerAttackEnums.RyuAttacksHurtType.Jab);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Jab;
-
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
-        }
-        else if (PlayerAttackEnums.RyuAttacks.Short == attackType) {
-            hitCollider.attackName = "Short";
-            hitCollider.attackSound = soundHit1;
-            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Short;
-            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Short;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)PlayerAttackEnums.RyuAttacksHurtType.Short);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Short;
-
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
-        }
-        else if (PlayerAttackEnums.RyuAttacks.Strong == attackType) {
-            hitCollider.attackName = "Strong";
-            hitCollider.attackSound = soundHit2;
-            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Strong;
-            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Strong;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)PlayerAttackEnums.RyuAttacksHurtType.Strong);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Strong;
-
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Big);
-        }
-        else if (PlayerAttackEnums.RyuAttacks.Forward == attackType) {
-            hitCollider.attackName = "Forward";
-            hitCollider.attackSound = soundHit4;
-            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Forward;
-            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Forward;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)PlayerAttackEnums.RyuAttacksHurtType.Forward);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Forward;
-
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Mid);
-        }
-        else if (PlayerAttackEnums.RyuAttacks.Shoryuken == attackType) {
-            hitCollider.attackName = "Shoryuken";
-            hitCollider.attackSound = soundHit3;
-            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Shoryuken;
-            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Shoryuken;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)PlayerAttackEnums.RyuAttacksHurtType.Shoryuken);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Shoryuken;
-
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Big);
-        }
-        
 
     }
     #endregion
@@ -427,6 +361,14 @@ public class PlayerController : MonoBehaviour {
 	void Animator_ToggleDashing()
 	{        
         isDashing = false;		
+        myAnim.SetBool("IsDashing", isDashing);
+	}
+	#endregion
+
+    #region Animator_ToggleCanRun
+	void Animator_ToggleCanRun()
+	{        
+        canRun = canRun ? false : true;
 	}
 	#endregion
 
