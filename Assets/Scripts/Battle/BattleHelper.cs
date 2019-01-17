@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleHelper : MonoBehaviour {
-    public static void SetHitCollider(ref HitCollider hitCollider, PlayerAttackEnums.RyuAttacks attackType)
+    public static void SetHitCollider(ref HitCollider hitCollider, PlayerAttackEnums.RyuAttacks attackType, bool isEXActive = false)
     {
         if (PlayerAttackEnums.RyuAttacks.Jab == attackType) {
             hitCollider.attackName = "Jab";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Jab;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Jab;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Jab;
 
             hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
@@ -18,7 +17,6 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackName = "Short";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Short;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Short;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Short;
 
             hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
@@ -27,47 +25,83 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackName = "Strong";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Strong;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Strong;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Strong;
 
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Big);
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
         else if (PlayerAttackEnums.RyuAttacks.Forward == attackType) {
             hitCollider.attackName = "Forward";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Forward;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Forward;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Forward;
 
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Mid);
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
+        // jump attacks
+        // ======================
+        else if (PlayerAttackEnums.RyuAttacks.JumpShort == attackType) {
+            hitCollider.attackName = "Jump Short";
+            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.JumpShort;
+            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.JumpShort;
+            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.JumpShort;
+
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
+        }
+        // special attacks
+        // ======================
         else if (PlayerAttackEnums.RyuAttacks.Shoryuken == attackType) {
             hitCollider.attackName = "Shoryuken";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Shoryuken;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Shoryuken;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Shoryuken;
 
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Big);
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
         else if (PlayerAttackEnums.RyuAttacks.Hadouken == attackType) {
             hitCollider.attackName = "Hadouken";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Hadouken;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Hadouken;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
-            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Hadouken;
+            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Hadouken;            
 
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.RyuHadouken);
+            var hitSparkType = isEXActive ? SpecialEffectsEnums.HitSparkType.RyuShakunetsu : SpecialEffectsEnums.HitSparkType.RyuHadouken;
+
+            hitCollider.hitSparkType = (hitSparkType);
         }
         else if (PlayerAttackEnums.RyuAttacks.Tatsumaki == attackType) {
             hitCollider.attackName = "Tatsumaki";
             hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.Tatsumaki;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Tatsumaki;
-            hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Tatsumaki;
 
-            hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Mid);
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
+        else if (PlayerAttackEnums.RyuAttacks.SolarPlexus == attackType) {
+            hitCollider.attackName = "Solar Plexus";
+            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.SolarPlexus;
+            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.SolarPlexus;
+            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.SolarPlexus;
+
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
+        }
+        else if (PlayerAttackEnums.RyuAttacks.RunningKick == attackType) {
+            hitCollider.attackName = "Running Kick";
+            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.RunningKick;
+            hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.RunningKick;
+            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.RunningKick;
+
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
+        }
+        else if (PlayerAttackEnums.RyuAttacks.HardKnee == attackType) {
+            hitCollider.attackName = "Hard Knee";
+            hitCollider.attackId = (int)PlayerAttackEnums.RyuAttacks.HardKnee;
+            hitCollider.hurtType = isEXActive ? (int)PlayerAttackEnums.RyuAttacksHurtType.EXHardKnee : (int)PlayerAttackEnums.RyuAttacksHurtType.HardKnee;            
+            hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.HardKnee;
+
+            hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
+        }
+        hitCollider.knockBackDistance = PlayerAttackEnums.RyuAttacksKnockbackDistance((int)attackType);
+        hitCollider.hitStop = PlayerAttackEnums.RyuAttacksHitStop(attackType, isEXActive);
+        
     }
     
 }

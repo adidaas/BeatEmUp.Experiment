@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour {
-
+	public PlayerInfoManager playerInfoManager;
 	public Slider healthBar;
 	[Range(0f, 100f)]
 	public int currentHealth;
@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour {
 	public float maxHealth;
 
 	void Start() {
+		healthTarget = playerInfoManager.currentHealth;
 		healthTargetDisplay = healthTarget * 0.01f;
 		currentHealthDisplay = currentHealth * 0.01f;
 	}

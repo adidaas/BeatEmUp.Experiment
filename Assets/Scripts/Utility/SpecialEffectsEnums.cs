@@ -4,35 +4,41 @@ using UnityEngine;
 
 public class SpecialEffectsEnums : MonoBehaviour {
 
-	public enum HitSparkType { Small = 0, Mid = 1, Big = 2, RyuHadouken = 3 }
+	public enum HitSparkType { Small = 0, Mid = 1, Big = 2, RyuHadouken = 3, RyuShakunetsu = 4 }
 	public enum RyuSpecialEffectsType { Hadouken = 0 }
+	public enum BattleEffectsUser { Ryu = 0 }
+	public enum MovementEffectsType { RunDust = 0 }
 
 	public static class RyuSpecialEffectsTriggerNames {
         public static string Hadouken { get { return "special_Hadouken"; } }
+		public static string Shakunetsu { get { return "special_Shakunetsu"; } }
     }
 
-	public static float GetHitSparkDestoryTime(int hitSparkType) {		
-		if (hitSparkType == (int)HitSparkType.Small) {
+	public static float GetHitSparkDestoryTime(SpecialEffectsEnums.HitSparkType hitSparkType) {		
+		if (hitSparkType == HitSparkType.Small) {
 			return 0.25f;
 		}
-		else if (hitSparkType == (int)HitSparkType.Mid) {
+		else if (hitSparkType == HitSparkType.Mid) {
 			return 0.21f;
 		}
-		else if (hitSparkType == (int)HitSparkType.Big) {
+		else if (hitSparkType == HitSparkType.Big) {
 			return 0.27f;
 		}
-		else if (hitSparkType == (int)HitSparkType.RyuHadouken) {
+		else if (hitSparkType == HitSparkType.RyuHadouken) {
 			return 0.25f;
 		}
+		else if (hitSparkType == HitSparkType.RyuShakunetsu) {
+			return 0.15f;
+		}
 
-		return 0.0f;
+		return 1.0f;
 	}
 
-	public static float GetSpecialEffectsDestoryTime(int specialEffectType)	{		
-		if (specialEffectType == (int)RyuSpecialEffectsType.Hadouken) {
+	public static float GetSpecialEffectsDestoryTime(RyuSpecialEffectsType specialEffectType)	{		
+		if (specialEffectType == RyuSpecialEffectsType.Hadouken) {
 			return 0.85f;
 		}
 
-		return 0.0f;
+		return 1.0f;
 	}
 }

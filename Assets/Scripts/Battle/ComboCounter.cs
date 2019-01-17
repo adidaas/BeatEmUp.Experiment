@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ComboCounter : MonoBehaviour {
-
+	public PlayerInfoManager playerInfoManager;
 	public GameObject comboCounter;
 	private UnityEngine.UI.Text comboCounterDisplay;
 	public GameObject backPanel;
@@ -30,7 +30,7 @@ public class ComboCounter : MonoBehaviour {
         else {
 			// convert combo count to special meter
 			int specialMeterToAdd = currentComboCount * 10;
-			specialMeter.ChangeSpecial(specialMeterToAdd);
+			playerInfoManager.AdjustSpecialMeter(specialMeterToAdd);
 			
 			// reset all parameters
             currentComboCount = 0;
@@ -57,8 +57,7 @@ public class ComboCounter : MonoBehaviour {
 		if (currentComboCount > 1) {
 			comboCounterDisplay.text = currentComboCount.ToString();
 
-			if (!isActive) {
-				
+			if (!isActive) {				
 				comboBarContainer.SetActive(true);
 				isActive = true;
 				backPanel.SetActive(true);
