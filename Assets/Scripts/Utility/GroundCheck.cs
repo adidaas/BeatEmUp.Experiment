@@ -37,13 +37,15 @@ public class GroundCheck : MonoBehaviour {
 		}		
 	}
 
-	void OnTriggerEnter2D(Collider2D other)	{		 
-		if (other.tag != gameObject.tag) {			 
-			slideParentObject = true;			 
-		}
-		if (other.tag == "Ground") {			 
-			slideParentObject = false;			 
-		}
+	
+
+	// void OnTriggerEnter2D(Collider2D other)	{		 
+	// 	if (other.tag != gameObject.tag) {			 
+	// 		slideParentObject = true;			 
+	// 	}
+	// 	if (other.tag == "Ground") {			 
+	// 		slideParentObject = false;			 
+	// 	}
 			
-	}
+	// }
 }

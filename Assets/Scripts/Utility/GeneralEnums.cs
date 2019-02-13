@@ -12,6 +12,10 @@ public class GeneralEnums : MonoBehaviour {
 		None = 0, Light = 1, Strong = 2 
 	}
 
+	public enum MovementDirection { 
+		Up = 0, Down = 1, Left = 2, Right = 3
+	}
+
 	public static class HurtTriggers
 	{
 		public static string HurtHigh { get { return "hurt_High"; } }
@@ -37,6 +41,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string BattleEffects { get { return "BattleEffects"; } }
 		public static string CharacterEffects { get { return "CharacterEffects"; } }
 		public static string WorldEffects { get { return "WorldEffects"; } }
+		public static string StyleManager { get { return "StyleManager"; } }		
 	}
 
 	public static class GameObjectLayer {

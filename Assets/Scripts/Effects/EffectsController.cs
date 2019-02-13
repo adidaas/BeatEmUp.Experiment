@@ -10,7 +10,12 @@ public class EffectsController : MonoBehaviour {
 	public bool isFacingRight = true;
 	private bool isEXAttack = false;
 	
+	
 	public SpecialEffectsEnums.BattleEffectsUser battleEffectsUser;
+
+	public AudioClip soundHadoukenSwing;
+	public AudioClip soundHadoukenHit0;
+    public AudioClip soundHadoukenHit1;	
 
 	void Start() {
 		if (gameObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
@@ -93,6 +98,7 @@ public class EffectsController : MonoBehaviour {
 					targetPosition = new Vector2(transform.position.x + 25, transform.position.y);
 				}
 				else {
+					print("left");
 					transform.localScale = new Vector2(-1f, 1f);
 					targetPosition =  new Vector2(transform.position.x - 25, transform.position.y);
 				}
@@ -104,6 +110,16 @@ public class EffectsController : MonoBehaviour {
 		}		
 		#endregion
 	}
+
+	#region PlaySoundEffect
+    public void PlaySoundEffect(int attackId) {
+        if (attackId == (int)PlayerAttackEnums.RyuAttacks.Hadouken) {
+            SoundEffectsManager.instance.RandomizeSfx(0.3f, soundHadoukenHit0);
+			SoundEffectsManager.instance.RandomizeSfx(0.3f, soundHadoukenHit1);
+        }
+
+    }
+    #endregion
 
 	public IEnumerator MoveSpecialEffectPosition(Vector2 targetPosition, float speed) {
 		while ((Vector2)transform.position != targetPosition) {

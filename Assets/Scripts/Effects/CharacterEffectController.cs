@@ -28,8 +28,8 @@ public class CharacterEffectController : MonoBehaviour {
         }
 		else if (effectType == CharacterEffectsEnums.MovementEffectsType.JumpDust01) {
             // jump dust 01
-			spawnPosition = isFacingRight ? new Vector2(this.transform.position.x - 2.5f, this.transform.position.y - 1.65f)
-					: new Vector2(this.transform.position.x + 2.5f, this.transform.position.y - 1.65f);
+			spawnPosition = isFacingRight ? new Vector2(this.transform.position.x - 1.5f, this.transform.position.y - 1.65f)
+					: new Vector2(this.transform.position.x + 1.5f, this.transform.position.y - 1.65f);
 
 			animationDelay = 0.015f;			
         }

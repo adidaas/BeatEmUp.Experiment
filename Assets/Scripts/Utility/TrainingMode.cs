@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TrainingMode : MonoBehaviour {
 	public GameObject playerCharacter;
@@ -21,7 +22,11 @@ public class TrainingMode : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {	
+		if (Input.GetKeyDown(KeyCode.F8)) {
+			SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+		}
+
 		if (Input.GetKeyDown(KeyCode.Period)) {			
 			notificationMessage.text = "Positions Saved";
 			savedPlayerPosition = playerCharacter.transform.position;
@@ -32,7 +37,10 @@ public class TrainingMode : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Slash)) {
 			notificationMessage.text = "Positions Reseted";
 			playerCharacter.transform.position = savedPlayerPosition;
-			enemyCharacter.transform.position =savedEnemyPosition;
+			enemyCharacter.transform.position = savedEnemyPosition;
+			PlayerController playerController = playerCharacter.GetComponent<PlayerController>();
+			EnemyController EnemyController = enemyCharacter.GetComponent<EnemyController>();
+
 			StartCoroutine(WaitToDeleteNotification());
 		}
 	}

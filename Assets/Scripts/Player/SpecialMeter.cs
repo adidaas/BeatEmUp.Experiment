@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SpecialMeter : MonoBehaviour {
 	public PlayerInfoManager playerInfoManager;
@@ -15,6 +16,8 @@ public class SpecialMeter : MonoBehaviour {
 	[Range(0f, 1f)]
 	public float specialTargetDisplay;
 	public int currentSpecialLevelDisplay = 0;
+	public AudioClip soundExLevelGain;
+		public AudioClip soundExLevelGainAnnoucer;
 
 	void Start() {
 		currentSpecialLevelDisplay = playerInfoManager.currentSpecialLevel;
@@ -49,7 +52,10 @@ public class SpecialMeter : MonoBehaviour {
 	}
 	
 	public void ChangeSpecialLevel(int specialAmountToChange) {
-		currentSpecialLevelDisplay += specialAmountToChange;		
+		currentSpecialLevelDisplay += specialAmountToChange;	
+		SoundEffectsManager.instance.RandomizeSfx(0.3f, soundExLevelGain);	
+
+		
 	}
 	
 	private void PositionSpecialBar() {		
@@ -60,4 +66,5 @@ public class SpecialMeter : MonoBehaviour {
 		}
 		specialBar.value = currentSpecialDisplay;
 	}
+
 }

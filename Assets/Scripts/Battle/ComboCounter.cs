@@ -25,9 +25,9 @@ public class ComboCounter : MonoBehaviour {
 	
 	void Update () {
 		if (comboTimer > 0f) {
-            comboTimer -= 1 * Time.deltaTime ;
+            comboTimer -= 0.5f * Time.deltaTime ;
         }
-        else {
+        else if (comboTimer <= 0f && currentComboCount > 0) {
 			// convert combo count to special meter
 			int specialMeterToAdd = currentComboCount * 10;
 			playerInfoManager.AdjustSpecialMeter(specialMeterToAdd);
@@ -42,7 +42,7 @@ public class ComboCounter : MonoBehaviour {
 
 		if (isActive) {
 			if (comboBarSlider.value > 0f) {				
-				comboBarSlider.value -=  (1 * Time.deltaTime) / 0.8f;
+				comboBarSlider.value -=  ( 0.5f * Time.deltaTime) / 0.8f;
 			}
 
 			if (comboBarSlider.value < 0.3f) {				
