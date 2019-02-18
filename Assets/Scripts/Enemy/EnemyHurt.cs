@@ -8,6 +8,7 @@ public class EnemyHurt : MonoBehaviour {
 	public EnemyController enemyController;
 	private Rigidbody2D myRigidBody;
 	private Animator myAnim;
+	private EnemyMovement enemyMovement;
 
 	private Vector3 targetPosition;
 	private Vector3 originalPosition;
@@ -28,6 +29,7 @@ public class EnemyHurt : MonoBehaviour {
 		enemyController = parentObject.GetComponent<EnemyController>();
 		myRigidBody = parentObject.GetComponent<Rigidbody2D>();
 		myAnim = parentObject.GetComponent<Animator>();
+		enemyMovement = gameObject.GetComponent<EnemyMovement>();
 	}
 
 	public void HurtLaunch_MovePosition() {
@@ -194,9 +196,11 @@ public class EnemyHurt : MonoBehaviour {
 		
 		if (hurtType == GeneralEnums.AttacksHurtType.High) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtHighRecover);
+			enemyMovement.canMove = true;
 		}	
 		else if (hurtType == GeneralEnums.AttacksHurtType.Mid) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtMidRecover);
+			enemyMovement.canMove = true;
 		}	
 		else if (hurtType == GeneralEnums.AttacksHurtType.Launch) {		
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtLaunch);

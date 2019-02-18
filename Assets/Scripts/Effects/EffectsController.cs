@@ -20,7 +20,7 @@ public class EffectsController : MonoBehaviour {
 	void Start() {
 		if (gameObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
 			hitCollider = hitBox.GetComponent<HitCollider>();
-			BattleHelper.SetHitCollider(ref hitCollider, PlayerAttackEnums.RyuAttacks.Hadouken, isEXAttack);	
+			BattleHelper.SetHitCollider(ref hitCollider, (int)PlayerAttackEnums.RyuAttacks.Hadouken, isEXAttack);	
 		}
 	}
 

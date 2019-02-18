@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour {
 	public IEnumerator hitStunCoroutine;
 	private CharacterEffectController characterEffectController;
 	public PlayerInfoManager playerInfoManager;
+	private EnemyMovement enemyMovement;
 
 	private float currentGravityScale = 3f;
 	public bool isGrounded;
@@ -61,6 +62,7 @@ public class EnemyController : MonoBehaviour {
 		groundCheckCollider = groundCheckObject.GetComponent<BoxCollider2D>();
 		airJuggleBoxCollider = airJuggleBoxObject.GetComponent<BoxCollider2D>();
 		characterEffectController = gameObject.GetComponent<CharacterEffectController>();
+		enemyMovement = gameObject.GetComponent<EnemyMovement>();
 		//StartCoroutine (MoveOverSeconds (gameObject, new Vector3 (0.0f, 10f, 0f), 2f));
 		//StartCoroutine (MoveOverSpeed (gameObject, new Vector3 (0.0f, 10f, 0f), 120f));
 
@@ -168,6 +170,7 @@ public class EnemyController : MonoBehaviour {
 	public void IsHit(int hurtType, float knockBackDistance, bool knockBackLeft, float hitStop) {
 		//knockBackDistance = 0.0f;
 		playerInfoManager.AdjustSpecialMeter(10);
+		enemyMovement.canMove = false;
 		float verticalKnockBack = myRigidbody.velocity.y;
 		float direction = 1.0f;
 		float hitshakeDuration = 0.2f;
@@ -376,8 +379,7 @@ public class EnemyController : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}		
 		myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtWakeUp);
-
-		
+		enemyMovement.canMove = true;		
 	}
 	#endregion
 

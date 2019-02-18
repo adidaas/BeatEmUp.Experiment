@@ -20,24 +20,27 @@ public class HitCollider : MonoBehaviour {
 	public GameObject hitSpark;
 	public HitSparksController hitSparkController;
 
-	public AudioSource audioSource;
 	public ScreenShake cameraScreenShake;
 
 	public GameObject comboCounterObject;
 	public ComboCounter comboCounter;
 	public GameObject styleManagerObject;
 	public StyleManager styleManager;
-	private PlayerController playerController;
+	private PlayerController parentPlayerController;
+	private PlayerAudio parentPlayerAudio;
+	private PlayerAttack playerAttack;
 	private Animator playerAnimator;
 	private EffectsController effectsController;
+	private EnemyController parentEnemyController;
 	private Animator enemyAnimator;
 	private bool isFacingRight;
 	private bool knockbackLeft = true;
+	private bool isPlayer = true;
 
 	private int previousSeed = 10;
 	private int randomCount = 1;
 
-	private bool switchComboStyleSystem = true;
+	private bool switchComboStyleSystem = true;	
 
 	#region Start
 	void Start () {
@@ -51,19 +54,34 @@ public class HitCollider : MonoBehaviour {
 		myBoxCollider = gameObject.GetComponent<BoxCollider2D>();
 		parentObject = gameObject.transform.parent.gameObject;
 		if (parentObject.tag == GeneralEnums.GameObjectTags.Player) {
-			playerController = parentObject.GetComponent<PlayerController>();
+			parentPlayerController = parentObject.GetComponent<PlayerController>();
+			parentPlayerAudio = parentObject.GetComponent<PlayerAudio>();
+			playerAttack = parentObject.GetComponent<PlayerAttack>();
 			playerAnimator = parentObject.GetComponent<Animator>();
-
-			
 		}
 		else if (parentObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
 			effectsController = parentObject.GetComponent<EffectsController>();
+		}
+		else if (parentObject.tag == GeneralEnums.GameObjectTags.Enemy) {
+			parentEnemyController = parentObject.GetComponent<EnemyController>();
+			isPlayer = false;
 		}
 	}
 	#endregion
 
 
-    IEnumerator OnTriggerEnter2D(Collider2D other) {		
+    IEnumerator OnTriggerEnter2D(Collider2D other) {
+		int layerMask = LayerMask.GetMask("Enemy");
+		Vector2 checkLeftStartingPosition = new Vector2(parentObject.transform.position.x -0.4f, parentObject.transform.position.y + 1f);
+		Vector2 checkUpLeftStartingPosition = new Vector2(parentObject.transform.position.x -0.5f, parentObject.transform.position.y);
+		Vector2 checkRightStartingPosition = new Vector2(parentObject.transform.position.x + 0.4f, parentObject.transform.position.y + 1f);
+		Vector2 checkUpRightStartingPosition = new Vector2(parentObject.transform.position.x + 0.5f, parentObject.transform.position.y);
+		RaycastHit2D checkLeft = Physics2D.Raycast(checkLeftStartingPosition, Vector2.left, 3.3f, layerMask);
+		RaycastHit2D checkUpLeft = Physics2D.Raycast(checkUpLeftStartingPosition, Vector2.up, 3.3f, layerMask);
+		RaycastHit2D checkRight = Physics2D.Raycast(checkRightStartingPosition, Vector2.right, 3.3f, layerMask);
+		RaycastHit2D checkUpRight = Physics2D.Raycast(checkUpRightStartingPosition, Vector2.up, 3.3f, layerMask);
+
+		// player hit box
 		if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.EnemyHurtBox) {	
 			var enemyController = other.transform.parent.gameObject.GetComponent<EnemyController>();
 
@@ -79,11 +97,11 @@ public class HitCollider : MonoBehaviour {
 			//audioSource.PlayOneShot(attackSound);
 
 			if (parentObject.tag == GeneralEnums.GameObjectTags.Player) {
-				switchComboStyleSystem = playerController.switchComboStyleSystem;
-				isFacingRight = playerController.isFacingRight;
-				playerController.PlaySoundEffect(attackId);
+				switchComboStyleSystem = parentPlayerController.switchComboStyleSystem;
+				isFacingRight = parentPlayerController.isFacingRight;
+				parentPlayerAudio.PlayHitSound((int)GeneralEnums.PlayerCharacters.Ryu, attackId);
 				if (!enemyController.isAirJuggleable && hitStop > 0f) {
-					StartCoroutine(playerController.PlayHitStop(hitStop));
+					StartCoroutine(playerAttack.PlayHitStop(hitStop));
 				}
 			}
 			else if (parentObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
@@ -111,15 +129,7 @@ public class HitCollider : MonoBehaviour {
 
 			// Enemy Reaction
 			// =================================
-			int layerMask = LayerMask.GetMask("Enemy");
-			Vector2 checkLeftStartingPosition = new Vector2(parentObject.transform.position.x -0.4f, parentObject.transform.position.y + 1f);
-			Vector2 checkUpLeftStartingPosition = new Vector2(parentObject.transform.position.x -0.5f, parentObject.transform.position.y);
-			Vector2 checkRightStartingPosition = new Vector2(parentObject.transform.position.x + 0.4f, parentObject.transform.position.y + 1f);
-			Vector2 checkUpRightStartingPosition = new Vector2(parentObject.transform.position.x + 0.5f, parentObject.transform.position.y);
-			RaycastHit2D checkLeft = Physics2D.Raycast(checkLeftStartingPosition, Vector2.left, 3.3f, layerMask);
-			RaycastHit2D checkUpLeft = Physics2D.Raycast(checkUpLeftStartingPosition, Vector2.up, 3.3f, layerMask);
-			RaycastHit2D checkRight = Physics2D.Raycast(checkRightStartingPosition, Vector2.right, 3.3f, layerMask);
-			RaycastHit2D checkUpRight = Physics2D.Raycast(checkUpRightStartingPosition, Vector2.up, 3.3f, layerMask);
+			
 
 			if ((checkLeft.collider != null && checkLeft.transform.gameObject == other.transform.parent.gameObject)
 				|| (checkUpLeft.collider != null && checkUpLeft.transform.gameObject == other.transform.parent.gameObject)) {
@@ -149,6 +159,57 @@ public class HitCollider : MonoBehaviour {
 
 			screenShakeType = 0;
         }
+
+		// enemy hit box
+		if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.PlayerHurtBox) {	
+			var playerHurt = other.transform.parent.gameObject.GetComponent<PlayerHurt>();
+			var playerController = other.transform.parent.gameObject.GetComponent<PlayerController>();
+			playerController.canMove = false;
+			playerController.canGroundAttack = false;
+
+			// if enemy is invincible state, ignore hit colliders
+			if (playerHurt.isInInvincibleState) {
+				yield break;
+			}			
+
+			// check if this is a special effect that needs to disappear upon hit
+			if (destroyOnHit) {				
+				Destroy(parentObject, 0.01f);
+			}
+
+			// Hit spark
+			// =================================
+			Vector3 hitSparkSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
+			hitSparkSpawnPosition.z = -1;
+			Quaternion randomZRotation = this.transform.rotation; // new Vector3(0, 0, Random.Range(0.0f, 360.0f));
+			var randomNumber = GetRandomNumber();
+			
+
+			GameObject hitSparkInstance = Instantiate(hitSpark, hitSparkSpawnPosition, Quaternion.Euler(new Vector3(0, 0, randomNumber)));
+			hitSparkInstance.transform.Rotate(new Vector3(0, 0, GetRandomNumber()));
+			hitSparkInstance.layer = GeneralEnums.GameObjectLayer.SpecialEffects;
+			HitSparksController hitSparkController = hitSparkInstance.GetComponent<HitSparksController>();
+			hitSparkController.PlayHitSpark(hitSparkType, isFacingRight);
+
+			var timeToLive = SpecialEffectsEnums.GetHitSparkDestoryTime(hitSparkType);
+
+			Destroy (hitSparkInstance, timeToLive);
+
+			// Enemy Reaction
+			// =================================
+			layerMask = LayerMask.GetMask("Player");
+
+			if ((checkLeft.collider != null && checkLeft.transform.gameObject == other.transform.parent.gameObject)
+				|| (checkUpLeft.collider != null && checkUpLeft.transform.gameObject == other.transform.parent.gameObject)) {
+				knockbackLeft = true;
+			}   
+			else if (checkRight.collider != null && checkRight.transform.gameObject == other.transform.parent.gameObject
+				|| (checkUpRight.collider != null && checkUpRight.transform.gameObject == other.transform.parent.gameObject) ) {
+				 knockbackLeft = false;
+			}   		
+			playerHurt.IsHit(hurtType, knockBackDistance, !isFacingRight, hitStop);
+			playerHurt.PlaySoundEffect(hurtType);
+		}
     }
 
 	float GetRandomNumber() {

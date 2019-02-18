@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySense : MonoBehaviour
 {
+    private EnemyMovement enemyMovement;
     public bool isPlayerInRange = false;
     private GameObject parentObject;
     private GameObject playerObject;
@@ -11,15 +12,17 @@ public class EnemySense : MonoBehaviour
     public SpriteRenderer spr;
     public Transform lineOfSightEnd;
 
+    public Vector2 targetPosition;
+    public bool isTargetInFront;
+
     void Start() {
-        lineOfSightEnd.transform.position = new Vector3(-17, -7, 0);
+        // lineOfSightEnd.transform.position = new Vector3(-17, -7, 0);
+         enemyMovement = transform.parent.gameObject.GetComponent<EnemyMovement>();
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         if (CanPlayerBeSeen()) {
             spr.color = Color.red;
-
         }            
         else {
             spr.color = Color.white;
@@ -27,19 +30,16 @@ public class EnemySense : MonoBehaviour
     }
 
 
-    bool CanPlayerBeSeen()
-    {
+    bool CanPlayerBeSeen() {
         // we only need to check visibility if the player is within the enemy's visual range
-        if (isPlayerInRange)
-        {
+        if (isPlayerInRange) {
             if (PlayerInFieldOfView())
                 return (!PlayerHiddenByObstacles());
             else
                 return false;
 
         }
-        else
-        {
+        else {
             // always false if the player is not within the enemy's range
             return false;
         }
@@ -47,9 +47,8 @@ public class EnemySense : MonoBehaviour
         //return playerInRange;
 
     }
-    void OnTriggerStay2D(Collider2D other)
-    {
-        // if 'other' is player, the player is seen 
+    void OnTriggerStay2D(Collider2D other) {
+        // if 'other' is player, the player is seen a
         // note, we don't really need to check the transform tag since the collision matrix is set to only 'see' collisions with the player layer
         if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.Player) {
             playerObject = other.transform.gameObject;
@@ -57,8 +56,7 @@ public class EnemySense : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
+    void OnTriggerExit2D(Collider2D other) {
         // if 'other' is player, the player is seen
         // note, we don't really need to check the transform tag since the collision matrix is set to only 'see' collisions with the player layer
         if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.Player) {
@@ -66,8 +64,7 @@ public class EnemySense : MonoBehaviour
         }
     }
 
-    bool PlayerInFieldOfView()
-    {
+    bool PlayerInFieldOfView() {
         // check if the player is within the enemy's field of view
         // this is only checked if the player is within the enemy's sight range
 
@@ -81,40 +78,38 @@ public class EnemySense : MonoBehaviour
         
         // calculate the angle formed between the player's position and the centre of the enemy's line of sight
         float angle = Vector2.Angle(directionToPlayer, lineOfSight);
-        
+        targetPosition = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y);
         // if the player is within 65 degrees (either direction) of the enemy's centre of vision (i.e. within a 130 degree cone whose centre is directly ahead of the enemy) return true
-        if (angle < 110)
+        if (angle < 110) {            
+            isTargetInFront = true;
             return true;
-        else
-            return false;
+        }
+        else {
+            isTargetInFront = false;
+            return true;            
+        }
+            
     }
 
-    bool PlayerHiddenByObstacles()
-    {
-
+    bool PlayerHiddenByObstacles() {
         float distanceToPlayer = Vector2.Distance(transform.position, playerObject.transform.position);
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, playerObject.transform.position - transform.position, distanceToPlayer);
         Debug.DrawRay(transform.position, playerObject.transform.position - transform.position, Color.blue); // draw line in the Scene window to show where the raycast is looking
         List<float> distances = new List<float>();
      
-        foreach (RaycastHit2D hit in hits)
-        {           
+        foreach (RaycastHit2D hit in hits) {           
             // ignore the enemy's own colliders (and other enemies)
             if (hit.transform.tag == "Enemy")
                 continue;
             
             // if anything other than the player is hit then it must be between the player and the enemy's eyes (since the player can only see as far as the player)
-            if (hit.transform.tag != "Player")
-            {
+            if (hit.transform.tag != "Player") {
                 return true;
             }
         }
 
         // if no objects were closer to the enemy than the player return false (player is not hidden by an object)
         return false; 
-
     }
-
-
    
 }

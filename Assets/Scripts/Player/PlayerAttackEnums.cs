@@ -48,26 +48,26 @@ public class PlayerAttackEnums : MonoBehaviour {
 		, Shoryuken = 4, Hadouken = 5, Tatsumaki = 6, SolarPlexus = 7, RunningKick = 8, HardKnee = 9
 	}
 
-	public static float RyuAttacksKnockbackDistance (RyuAttacks attackType) {
+	public static float RyuAttacksKnockbackDistance (int attackType) {
 		// normals
-		if (attackType == RyuAttacks.Jab) return 0.3f;
-		else if (attackType == RyuAttacks.Short) return 0.3f;
-		else if (attackType == RyuAttacks.Strong) return 9.6f;
-		else if (attackType == RyuAttacks.Fierce) return 0.6f;
-		else if (attackType == RyuAttacks.HighRoundhouse) return 14.5f;
-		else if (attackType == RyuAttacks.Overhead) return 0.3f;
-		else if (attackType == RyuAttacks.CrouchForward) return 0.3f;
-		else if (attackType == RyuAttacks.CrouchFierce) return 0.6f;
-		else if (attackType == RyuAttacks.CloseForward) return 18.5f;
+		if (attackType == (int)RyuAttacks.Jab) return 0.3f;
+		else if (attackType == (int)RyuAttacks.Short) return 0.3f;
+		else if (attackType == (int)RyuAttacks.Strong) return 9.6f;
+		else if (attackType == (int)RyuAttacks.Fierce) return 0.6f;
+		else if (attackType == (int)RyuAttacks.HighRoundhouse) return 14.5f;
+		else if (attackType == (int)RyuAttacks.Overhead) return 0.3f;
+		else if (attackType == (int)RyuAttacks.CrouchForward) return 0.3f;
+		else if (attackType == (int)RyuAttacks.CrouchFierce) return 0.6f;
+		else if (attackType == (int)RyuAttacks.CloseForward) return 18.5f;
 		// jump attack
-		else if (attackType == RyuAttacks.JumpShort) return 0.5f;
+		else if (attackType == (int)RyuAttacks.JumpShort) return 0.5f;
 		// special moves
-		else if (attackType == RyuAttacks.Hadouken) return 0.3f;
-		else if (attackType == RyuAttacks.Shoryuken) return 2.5f;
-		else if (attackType == RyuAttacks.Tatsumaki) return 14.5f;
-		else if (attackType == RyuAttacks.SolarPlexus) return 5.5f;
-		else if (attackType == RyuAttacks.RunningKick) return 8.5f;	
-		else if (attackType == RyuAttacks.HardKnee) return 1.5f;	
+		else if (attackType == (int)RyuAttacks.Hadouken) return 0.3f;
+		else if (attackType == (int)RyuAttacks.Shoryuken) return 2.5f;
+		else if (attackType == (int)RyuAttacks.Tatsumaki) return 14.5f;
+		else if (attackType == (int)RyuAttacks.SolarPlexus) return 5.5f;
+		else if (attackType == (int)RyuAttacks.RunningKick) return 8.5f;	
+		else if (attackType == (int)RyuAttacks.HardKnee) return 1.5f;	
 
 		return 0f;
 	} 
@@ -114,30 +114,30 @@ public class PlayerAttackEnums : MonoBehaviour {
 		, Shoryuken = 2, Hadouken = 0, Tatsumaki = 0, SolarPlexus = 1,  RunningKick = 1, HardKnee = 2,
 	}
 
-	public static float RyuAttacksHitStop (RyuAttacks attackType, bool isEXAttack = false) { 
+	public static float RyuAttacksHitStop (int attackType, bool isEXAttack = false) { 
 		if (!isEXAttack) {
-			if (attackType == RyuAttacks.Jab) return 0f;
-			else if (attackType == RyuAttacks.Short) return 0f;
-			else if (attackType == RyuAttacks.Strong) return 0.1f;
-			else if (attackType == RyuAttacks.Forward) return 0f;	
-			else if (attackType == RyuAttacks.Fierce) return 0.02f;
-			else if (attackType == RyuAttacks.HighRoundhouse) return 0.05f;
-			else if (attackType == RyuAttacks.Overhead) return 0.02f;
-			else if (attackType == RyuAttacks.CrouchForward) return 0.01f;	
-			else if (attackType == RyuAttacks.CrouchFierce) return 0.02f;
-			else if (attackType == RyuAttacks.CloseForward) return 0.05f;
+			if (attackType == (int)RyuAttacks.Jab) return 0f;
+			else if (attackType == (int)RyuAttacks.Short) return 0f;
+			else if (attackType == (int)RyuAttacks.Strong) return 0.1f;
+			else if (attackType == (int)RyuAttacks.Forward) return 0f;	
+			else if (attackType == (int)RyuAttacks.Fierce) return 0.02f;
+			else if (attackType == (int)RyuAttacks.HighRoundhouse) return 0.05f;
+			else if (attackType == (int)RyuAttacks.Overhead) return 0.02f;
+			else if (attackType == (int)RyuAttacks.CrouchForward) return 0.01f;	
+			else if (attackType == (int)RyuAttacks.CrouchFierce) return 0.02f;
+			else if (attackType == (int)RyuAttacks.CloseForward) return 0.05f;
 			// jump attacks	
-			else if (attackType == RyuAttacks.JumpShort) return 0f;	
+			else if (attackType == (int)RyuAttacks.JumpShort) return 0f;	
 			// special moves
-			else if (attackType == RyuAttacks.Hadouken) return 0f;
-			else if (attackType == RyuAttacks.Shoryuken) return 0.30f;
-			else if (attackType == RyuAttacks.Tatsumaki) return 0f;
-			else if (attackType == RyuAttacks.SolarPlexus) return 0.2f;
-			else if (attackType == RyuAttacks.RunningKick) return 0f;	
-			else if (attackType == RyuAttacks.HardKnee) return 0.35f;	
+			else if (attackType == (int)RyuAttacks.Hadouken) return 0f;
+			else if (attackType == (int)RyuAttacks.Shoryuken) return 0.30f;
+			else if (attackType == (int)RyuAttacks.Tatsumaki) return 0f;
+			else if (attackType == (int)RyuAttacks.SolarPlexus) return 0.2f;
+			else if (attackType == (int)RyuAttacks.RunningKick) return 0f;	
+			else if (attackType == (int)RyuAttacks.HardKnee) return 0.35f;	
 		}
 		else if (isEXAttack) {
-			if (attackType == RyuAttacks.HardKnee) return 0.08f;	
+			if (attackType == (int)RyuAttacks.HardKnee) return 0.08f;	
 		}
 		
 

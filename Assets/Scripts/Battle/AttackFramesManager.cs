@@ -8,6 +8,8 @@ public class AttackFramesManager : MonoBehaviour
     public BoxCollider2D hitBoxBoxCollider;
     public IEnumerator playAttackFramesRoutine;
     public PlayerController playerController;
+    private EnemyController enemyController;
+    private EnemyAttack enemyAttack;
     private int startUpFrame = 0;
     private int activeFrame = 0;
     private int recoveryFrame = 0;
@@ -20,10 +22,18 @@ public class AttackFramesManager : MonoBehaviour
     private Phases currentPhase;
     private bool isInRecovery = false;
     private bool isInCancelWindow = false;
+    private bool isPlayer = true;
     
     private void Start() {
         hitBoxBoxCollider = hitBoxGameObject.GetComponent<BoxCollider2D>();
-        playerController = gameObject.GetComponent<PlayerController>();
+        if (gameObject.tag == GeneralEnums.GameObjectTags.Player) {
+            playerController = gameObject.GetComponent<PlayerController>();
+        }        
+        if (gameObject.tag == GeneralEnums.GameObjectTags.Enemy) {
+            enemyController = gameObject.GetComponent<EnemyController>();
+            enemyAttack = gameObject.GetComponent<EnemyAttack>();
+            isPlayer = false;
+        }
     }
 
     public enum Phases { 
@@ -33,29 +43,42 @@ public class AttackFramesManager : MonoBehaviour
     void Update() {
         if (isTrackingFrame) {
             currentFrameCount++;
-            print(currentFrameCount);
-            print(currentPhase);
-
-            if (currentFrameCount >= cancelWindowFrames) { 
-                isInCancelWindow = true; 
-                playerController.isAttacking = false;
-            }
-            else if (currentFrameCount < cancelWindowFrames) { 
-                playerController.isAttacking = true;
-            }
+            // print(currentFrameCount);
+            // print(currentPhase);
+            if (isPlayer) {
+                if (currentFrameCount >= cancelWindowFrames) { 
+                    isInCancelWindow = true; 
+                    playerController.isAttacking = false;
+                }
+                else if (currentFrameCount < cancelWindowFrames) { 
+                    playerController.isAttacking = true;
+                }
+            }     
+            //print(currentFrameCount);
 
             if (currentFrameCount == activeFrame ) { 
                 currentPhase = Phases.Active; 
+                //print("ACTIVE==================");
                 SetHitboxActive(); 
             }
             else if (currentFrameCount == recoveryFrame ) { 
                 currentPhase = Phases.Recovery; 
                 SetHitboxActive(); 
-                playerController.canMove = true;
+                if (isPlayer) {
+                    playerController.canMove = true;
+                }
+                else {
+                    //enemyController.canMove = true;
+                }
+                
             }
-            else if (currentFrameCount == endFrame ) { 
+            else if (currentFrameCount == (endFrame + 55) ) { 
                 currentPhase = Phases.End; 
                 isTrackingFrame = false;
+
+                if (!isPlayer) {
+                    enemyAttack.isAttacking = false;
+                }
             }
 
         }
@@ -75,6 +98,11 @@ public class AttackFramesManager : MonoBehaviour
             recoveryFrame = PlayerAttackEnums.RyuAttacksRecoveryFrames(attackType, isExAttack);
             cancelWindowFrames = PlayerAttackEnums.RyuAttacksCancelWindow(attackType, isExAttack);
             endFrame = PlayerAttackEnums.RyuAttacksEndFrames(attackType, isExAttack);
+        }
+        else if (character == 2) {            
+            activeFrame = EnemyAttackEnums.TerryAttacksActiveFrames(attackType);
+            recoveryFrame = EnemyAttackEnums.TerryAttacksRecoveryFrames(attackType);
+            endFrame = EnemyAttackEnums.TerryAttacksEndFrames(attackType);
 
         }
     }
@@ -101,4 +129,10 @@ public class AttackFramesManager : MonoBehaviour
             hitBoxBoxCollider.enabled = false;
         }
     }
+
+    #region StartAttackFrameTracking
+    public void StartAttackFrameTracking() {
+        StartFrameTracking();
+    }
+    #endregion
 }

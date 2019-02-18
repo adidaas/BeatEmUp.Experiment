@@ -42,6 +42,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string CharacterEffects { get { return "CharacterEffects"; } }
 		public static string WorldEffects { get { return "WorldEffects"; } }
 		public static string StyleManager { get { return "StyleManager"; } }		
+		public static string PlayerHurtBox { get { return "PlayerHurtBox"; } }
 	}
 
 	public static class GameObjectLayer {
@@ -63,6 +64,10 @@ public class GeneralEnums : MonoBehaviour {
 		public static string AirIdle { get { return "air_Idle"; } }
 		public static string AirFalling { get { return "air_Falling"; } }
 		public static string AirLanding { get { return "air_Landing"; } }
+	}
+
+	public enum PlayerCharacters {
+		Ryu = 1
 	}
 
 }
