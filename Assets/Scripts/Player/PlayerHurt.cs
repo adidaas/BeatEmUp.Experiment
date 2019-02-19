@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHurt : MonoBehaviour
 {
     private PlayerController playerController;
+    private PlayerAudio playerAudio;
     private Animator myAnim;
     private Rigidbody2D myRigidbody;
     public IEnumerator hitStunCoroutine;
@@ -14,6 +15,7 @@ public class PlayerHurt : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         playerController = gameObject.GetComponent<PlayerController>();
+        playerAudio = gameObject.GetComponent<PlayerAudio>();
         myAnim = gameObject.GetComponent<Animator>();
         myRigidbody = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -27,6 +29,8 @@ public class PlayerHurt : MonoBehaviour
         float verticalKnockBack = myRigidbody.velocity.y;
 		float direction = 1.0f;
 		float hitshakeDuration = 0.2f;
+
+        playerAudio.PlayHurtSound(playerController.playerCharacter, hurtType);
 
         if (hurtType == (int)GeneralEnums.AttacksHurtType.High) {
             myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtHigh);			

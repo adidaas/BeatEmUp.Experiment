@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour {
 	private CharacterEffectController characterEffectController;
 	public PlayerInfoManager playerInfoManager;
 	private EnemyMovement enemyMovement;
+	private EnemyAudio enemyAudio;
+
+	public int enemyCharacter = (int)GeneralEnums.EnemyCharacters.Terry;
 
 	private float currentGravityScale = 3f;
 	public bool isGrounded;
@@ -63,6 +66,7 @@ public class EnemyController : MonoBehaviour {
 		airJuggleBoxCollider = airJuggleBoxObject.GetComponent<BoxCollider2D>();
 		characterEffectController = gameObject.GetComponent<CharacterEffectController>();
 		enemyMovement = gameObject.GetComponent<EnemyMovement>();
+		enemyAudio = gameObject.GetComponent<EnemyAudio>();
 		//StartCoroutine (MoveOverSeconds (gameObject, new Vector3 (0.0f, 10f, 0f), 2f));
 		//StartCoroutine (MoveOverSpeed (gameObject, new Vector3 (0.0f, 10f, 0f), 120f));
 
@@ -180,6 +184,8 @@ public class EnemyController : MonoBehaviour {
 		enemyHurt.hurtType = hurtType;
 		StartCoroutine(PauseAirSlideTracker());
 
+		enemyAudio.PlayHurtSound((int)GeneralEnums.EnemyCharacters.Terry, hurtType);
+
 		
 		if (knockBackLeft) {
 			direction = -1.0f;
@@ -243,22 +249,6 @@ public class EnemyController : MonoBehaviour {
 			myRigidbody.velocity = new Vector2(knockBackDistance * direction, verticalKnockBack);
 			StartCoroutine(KnockBackWait());			
 		}		
-	}
-
-	public void PlaySoundEffect(int hurtType) {
-		if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.High) {
-            SoundEffectsManager.instance.RandomizeSfx(0.5f, soundTerryHurtLight0, soundTerryHurtLight1, soundTerryHurtMedium0);
-        }
-		else if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.Launch) {
-            SoundEffectsManager.instance.RandomizeSfx(0.5f, soundTerryHurtMedium1, soundTerryHurtHard0);
-        }
-		else if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.LaunchBack) {
-            SoundEffectsManager.instance.RandomizeSfx(0.5f, soundTerryHurtMedium0, soundTerryHurtHard1);
-        }
-		else if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.WallBounce) {
-            SoundEffectsManager.instance.RandomizeSfx(0.5f, soundTerryHurtLight0, soundTerryHurtLight1);
-        }
-
 	}
 	
 	public IEnumerator PauseAirSlideTracker() {

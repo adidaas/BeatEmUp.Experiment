@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using PlayerMovementControl;
 
 public class PlayerController : MonoBehaviour {
 
@@ -22,6 +21,7 @@ public class PlayerController : MonoBehaviour {
     public PlayerInfoManager playerInfoManager;
     public AttackFramesManager attackFramesManager;
 
+    public int playerCharacter = (int)GeneralEnums.PlayerCharacters.Ryu; 
 
     public bool canDash;
     public bool canMove;

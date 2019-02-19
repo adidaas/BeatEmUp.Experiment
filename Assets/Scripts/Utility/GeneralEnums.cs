@@ -70,4 +70,8 @@ public class GeneralEnums : MonoBehaviour {
 		Ryu = 1
 	}
 
+	public enum EnemyCharacters {
+		Terry = 1
+	}
+
 }

@@ -15,6 +15,13 @@ public class PlayerAudio : MonoBehaviour
 	public AudioClip soundRyuTatsumaki;
 	public AudioClip soundRyuShoryuken;	
 
+    public AudioClip soundRyuHurtLight0;
+	public AudioClip soundRyuHurtLight1;
+	public AudioClip soundRyuHurtMedium0;
+	public AudioClip soundRyuHurtMedium1;
+	public AudioClip soundRyuHurtHard0;
+	public AudioClip soundRyuHurtHard1;
+
     public AudioClip soundSwingLight0;
 	public AudioClip soundSwingLight1;
 	public AudioClip soundSwingMedium0;
@@ -40,148 +47,155 @@ public class PlayerAudio : MonoBehaviour
 
     public AudioClip soundHadoukenSwing;
 
-    void Start() {
-        
-    }
-
-    void Update() {
-        
-    }
+    // 0: Light0, 1: Light1, 2: Light2, 3: Light3
+    // 4: Medium0, 5: Medium1, 6: Medium2, 7: Medium3
+    // 8: Hard0, 9: Hard1, 10: Hard2, 11: Hard3
 
     public void PlayHitSound(int character, int attackType) {
         if (character == (int)GeneralEnums.PlayerCharacters.Ryu) {
             if (attackType == (int)PlayerAttackEnums.RyuAttacks.Jab) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitLight0, soundHitLight1);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 0, 1);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Short) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitLight2, soundHitMedium0);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 2, 3);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Strong) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard0, soundHitMedium2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 8, 6);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Fierce) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard0, soundHitMedium3);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 7, 5);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.HighRoundhouse) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard1, soundHitMedium2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 9, 6);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Overhead) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard1, soundHitMedium1);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 10, 4);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CrouchForward) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitLight1, soundHitLight2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 3, 1);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CrouchFierce) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard0, soundHitMedium2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 7, 9);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CloseForward) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard3, soundHitMedium3);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 11, 10);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Shoryuken) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard2, soundHitHard3);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 10, 11);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Tatsumaki) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitMedium0, soundHitMedium3);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 7, 6);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.HardKnee) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard3, soundHitHard2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 8, 9);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.RunningKick) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitMedium1, soundHitMedium2);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 5, 6);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.SolarPlexus) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitHard0, soundHitHard1);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 8, 9);
             }
             else if (attackType == (int)PlayerAttackEnums.RyuAttacks.JumpShort) {
-                SoundEffectsManager.instance.RandomizeSfx(0.4f, soundHitLight2, soundHitMedium0);
+                SoundEffectsManager.instance.PlayRandomHitSound(0.4f, 3, 5);
             }
         }
     }
 
+    // 0: Light0, 1: Light1, 2: Light2, 3: Light3
+    // 4: Medium0, 5: Medium1, 6: Medium2, 7: Medium3
+    // 8: Hard0, 9: Hard1, 10: Hard2, 11: Hard3
     public void PlayAttackSound(int character, int attackType, bool isExAttack) {
         if (character == 1) {
             if (!isExAttack) {
                 if (attackType == (int)PlayerAttackEnums.RyuAttacks.Jab) {
-                SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing0, soundRyuSwing1);
-                SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingLight0, soundSwingLight1);
+                    SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing0, soundRyuSwing1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 0, 1);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Short) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing4, soundRyuSwing6);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium0, soundSwingMedium1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 3, 4);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Fierce) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing1, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium2, soundSwingMedium0);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 5, 6);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Strong) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing2, soundRyuSwing3);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 8, 7);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.HighRoundhouse) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing5, soundRyuSwing3);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 9, 11);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Forward) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing6, soundRyuSwing0);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 4, 5);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Overhead) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing1, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium2, soundSwingMedium0);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 4, 6);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CrouchForward) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing5, soundRyuSwing3);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 9, 7);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CrouchFierce) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing4, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium2, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 6, 8);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.CloseForward) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing4, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 7, 9);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Shoryuken) {
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard2, soundSwingHard1);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 10, 8);
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuShoryuken);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Tatsumaki) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuTatsumaki);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium1, soundSwingMedium2);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 5, 6);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.HardKnee) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing5);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard2);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 8, 11);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Hadouken) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuHadouken);
                     SoundEffectsManager.instance.RandomizeSfx(0.3f, soundHadoukenSwing);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.JumpShort) {
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundRyuSwing0, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingLight1, soundSwingMedium0);
+                    SoundEffectsManager.instance.RandomizeSfx(0.4f, soundRyuSwing0, soundRyuSwing2);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 3, 5);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.RunningKick) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing5, soundRyuSwing4);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingMedium1, soundSwingMedium0);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 6, 7);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.SolarPlexus) {
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundRyuSwing3, soundRyuSwing2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard1, soundSwingMedium0);
+                    SoundEffectsManager.instance.RandomizeSfx(0.4f, soundRyuSwing3, soundRyuSwing2);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 8, 5);
                 }
 
             }
             else {
                 if (attackType == (int)PlayerAttackEnums.RyuAttacks.HardKnee) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuSwing3, soundRyuSwing5);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundSwingHard0, soundSwingHard2);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundExActivate);
+                    SoundEffectsManager.instance.PlayRandomSwingSound(0.4f, 8, 11);
+                    SoundEffectsManager.instance.RandomizeSfx(0.4f, soundExActivate);
                 }
                 else if (attackType == (int)PlayerAttackEnums.RyuAttacks.Hadouken) {
                     SoundEffectsManager.instance.RandomizeSfx(0.7f, soundRyuHadouken);
-                    SoundEffectsManager.instance.RandomizeSfx(0.5f, soundExActivate);
+                    SoundEffectsManager.instance.RandomizeSfx(0.4f, soundExActivate);
                 }
 
+            }
+        }
+    }
+
+    public void PlayHurtSound(int character, int hurtType) {
+         if (character == (int)GeneralEnums.PlayerCharacters.Ryu) {
+            if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.High) {
+                SoundEffectsManager.instance.RandomizeSfx(0.5f, soundRyuHurtLight0, soundRyuHurtMedium1, soundRyuHurtHard0);
             }
         }
     }

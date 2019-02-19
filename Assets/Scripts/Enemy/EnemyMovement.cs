@@ -26,7 +26,7 @@ public class EnemyMovement : MonoBehaviour
             float distanceToTarget = Vector2.Distance(enemySense.targetPosition, transform.position);
             //print(distanceToTarget);
 
-            if (distanceToTarget > 5f) {
+            if (distanceToTarget > 5.7f) {
                 float direction;// = enemyController.isFacingRight ? 1f : -1f;
                 float facingDirection;
 

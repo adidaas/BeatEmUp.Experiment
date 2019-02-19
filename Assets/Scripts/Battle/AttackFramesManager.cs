@@ -72,12 +72,12 @@ public class AttackFramesManager : MonoBehaviour
                 }
                 
             }
-            else if (currentFrameCount == (endFrame + 55) ) { 
+            else if (currentFrameCount == (endFrame) ) { 
                 currentPhase = Phases.End; 
                 isTrackingFrame = false;
 
                 if (!isPlayer) {
-                    enemyAttack.isAttacking = false;
+                    enemyAttack.trackAttackCooldown = true;
                 }
             }
 

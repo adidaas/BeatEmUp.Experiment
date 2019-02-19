@@ -5,7 +5,7 @@ using UnityEngine;
 public class HitCollider : MonoBehaviour {
 
     public string attackName;
-	public int attackId;
+	public int attackType;
 	public AudioClip attackSound;
 	public int hurtType;
 	public float knockBackDistance;
@@ -32,6 +32,7 @@ public class HitCollider : MonoBehaviour {
 	private Animator playerAnimator;
 	private EffectsController effectsController;
 	private EnemyController parentEnemyController;
+	private EnemyAudio parentEnemyAudio;
 	private Animator enemyAnimator;
 	private bool isFacingRight;
 	private bool knockbackLeft = true;
@@ -64,6 +65,7 @@ public class HitCollider : MonoBehaviour {
 		}
 		else if (parentObject.tag == GeneralEnums.GameObjectTags.Enemy) {
 			parentEnemyController = parentObject.GetComponent<EnemyController>();
+			parentEnemyAudio = parentObject.GetComponent<EnemyAudio>();
 			isPlayer = false;
 		}
 	}
@@ -99,14 +101,14 @@ public class HitCollider : MonoBehaviour {
 			if (parentObject.tag == GeneralEnums.GameObjectTags.Player) {
 				switchComboStyleSystem = parentPlayerController.switchComboStyleSystem;
 				isFacingRight = parentPlayerController.isFacingRight;
-				parentPlayerAudio.PlayHitSound((int)GeneralEnums.PlayerCharacters.Ryu, attackId);
+				parentPlayerAudio.PlayHitSound((int)GeneralEnums.PlayerCharacters.Ryu, attackType);
 				if (!enemyController.isAirJuggleable && hitStop > 0f) {
 					StartCoroutine(playerAttack.PlayHitStop(hitStop));
 				}
 			}
 			else if (parentObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
 				isFacingRight = effectsController.isFacingRight;
-				effectsController.PlaySoundEffect(attackId);
+				effectsController.PlaySoundEffect(attackType);
 			}
 
 			// Hit spark
@@ -128,9 +130,7 @@ public class HitCollider : MonoBehaviour {
 			Destroy (hitSparkInstance, timeToLive);
 
 			// Enemy Reaction
-			// =================================
-			
-
+			// =================================			
 			if ((checkLeft.collider != null && checkLeft.transform.gameObject == other.transform.parent.gameObject)
 				|| (checkUpLeft.collider != null && checkUpLeft.transform.gameObject == other.transform.parent.gameObject)) {
 				knockbackLeft = true;
@@ -140,7 +140,6 @@ public class HitCollider : MonoBehaviour {
 				 knockbackLeft = false;
 			}   		
 			enemyController.IsHit(hurtType, knockBackDistance, !isFacingRight, hitStop);
-			enemyController.PlaySoundEffect(hurtType);
 
 			// Combo Counter
 			// =================================			
@@ -177,6 +176,8 @@ public class HitCollider : MonoBehaviour {
 				Destroy(parentObject, 0.01f);
 			}
 
+			parentEnemyAudio.PlayHitSound(parentEnemyController.enemyCharacter, attackType);
+
 			// Hit spark
 			// =================================
 			Vector3 hitSparkSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
@@ -195,7 +196,7 @@ public class HitCollider : MonoBehaviour {
 
 			Destroy (hitSparkInstance, timeToLive);
 
-			// Enemy Reaction
+			// Player Reaction
 			// =================================
 			layerMask = LayerMask.GetMask("Player");
 

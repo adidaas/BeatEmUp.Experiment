@@ -21,13 +21,13 @@ public class EnemyAttackEnums : MonoBehaviour
 
 	public enum TerryAttacksScreenShake { 
 		// normals
-		FarRoundhouse = 1, Roundhouse = 1
+		FarRoundhouse = 1, Roundhouse = 1, Fierce = 1
 	}
 
     public static int TerryAttacksActiveFrames (int attackType) {
 		Dictionary<int, int> terryActiveFrames = new Dictionary<int, int> {
 			{ (int)TerryAttacks.Fierce, 5},
-			{ (int)TerryAttacks.FarRoundhouse, 28},			
+			{ (int)TerryAttacks.FarRoundhouse, 18},			
 		};
 		int activeFrames = terryActiveFrames[attackType];
 
@@ -37,7 +37,7 @@ public class EnemyAttackEnums : MonoBehaviour
 	public static int TerryAttacksRecoveryFrames (int attackType) {
 		Dictionary<int, int> terryRecoveryFrames = new Dictionary<int, int> {
 			{ (int)TerryAttacks.Fierce, 11},
-			{ (int)TerryAttacks.FarRoundhouse, 35},	
+			{ (int)TerryAttacks.FarRoundhouse, 25},	
 		};
 
 		int recoveryFrames = terryRecoveryFrames[attackType];
@@ -48,7 +48,7 @@ public class EnemyAttackEnums : MonoBehaviour
 	public static int TerryAttacksEndFrames (int attackType) {
 		Dictionary<int, int> terryEndFrames = new Dictionary<int, int> {
 			{ (int)TerryAttacks.Fierce, 26},
-			{ (int)TerryAttacks.FarRoundhouse, 36},	
+			{ (int)TerryAttacks.FarRoundhouse, 35},	
 		};
 
 		int endFrames = terryEndFrames[attackType];
