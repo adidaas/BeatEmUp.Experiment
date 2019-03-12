@@ -196,11 +196,11 @@ public class EnemyHurt : MonoBehaviour {
 		
 		if (hurtType == GeneralEnums.AttacksHurtType.High) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtHighRecover);
-			enemyMovement.canMove = true;
+			enemyController.canMove = true;
 		}	
 		else if (hurtType == GeneralEnums.AttacksHurtType.Mid) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtMidRecover);
-			enemyMovement.canMove = true;
+			enemyController.canMove = true;
 		}	
 		else if (hurtType == GeneralEnums.AttacksHurtType.Launch) {		
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtLaunch);

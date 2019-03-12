@@ -10,6 +10,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Jab;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Jab;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Jab;
+            hitCollider.damageValue = 2;
 
             hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
         }
@@ -18,6 +19,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Short;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Short;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Short;
+            hitCollider.damageValue = 2;
 
             hitCollider.hitSparkType = ((int)SpecialEffectsEnums.HitSparkType.Small);
         }
@@ -26,6 +28,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Strong;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Strong;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Strong;
+            hitCollider.damageValue = 4;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -34,6 +37,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Forward;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Forward;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Forward;
+            hitCollider.damageValue = 3;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -42,6 +46,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Fierce;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Fierce;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Fierce;
+            hitCollider.damageValue = 4;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -50,6 +55,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.HighRoundhouse;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.HighRoundhouse;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.HighRoundhouse;
+            hitCollider.damageValue = 5;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -58,6 +64,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Overhead;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Overhead;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Overhead;
+            hitCollider.damageValue = 3;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -66,6 +73,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.CrouchForward;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.CrouchForward;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.CrouchForward;
+            hitCollider.damageValue = 3;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Small;
         }
@@ -74,6 +82,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.CrouchFierce;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.CrouchFierce;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.CrouchFierce;
+            hitCollider.damageValue = 3;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -82,6 +91,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.CloseForward;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.CloseForward;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.CloseForward;
+            hitCollider.damageValue = 5;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -92,6 +102,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.JumpShort;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.JumpShort;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.JumpShort;
+            hitCollider.damageValue = 4;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -102,6 +113,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Shoryuken;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Shoryuken;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Shoryuken;
+            hitCollider.damageValue = 12;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -110,6 +122,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Hadouken;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Hadouken;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Hadouken;            
+            hitCollider.damageValue = 5;
 
             var hitSparkType = isEXActive ? SpecialEffectsEnums.HitSparkType.RyuShakunetsu : SpecialEffectsEnums.HitSparkType.RyuHadouken;
 
@@ -120,6 +133,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.Tatsumaki;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.Tatsumaki;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.Tatsumaki;
+            hitCollider.damageValue = 7;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -128,6 +142,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.SolarPlexus;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.SolarPlexus;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.SolarPlexus;
+            hitCollider.damageValue = 8;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -136,6 +151,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.RunningKick;
             hitCollider.hurtType = (int)PlayerAttackEnums.RyuAttacksHurtType.RunningKick;
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.RunningKick;
+            hitCollider.damageValue = 6;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Mid;
         }
@@ -144,6 +160,7 @@ public class BattleHelper : MonoBehaviour {
             hitCollider.attackType = (int)PlayerAttackEnums.RyuAttacks.HardKnee;
             hitCollider.hurtType = isEXActive ? (int)PlayerAttackEnums.RyuAttacksHurtType.EXHardKnee : (int)PlayerAttackEnums.RyuAttacksHurtType.HardKnee;            
             hitCollider.screenShakeType = (int)PlayerAttackEnums.RyuAttacksScreenShake.HardKnee;
+            hitCollider.damageValue = 18;
 
             hitCollider.hitSparkType = SpecialEffectsEnums.HitSparkType.Big;
         }
@@ -154,12 +171,13 @@ public class BattleHelper : MonoBehaviour {
 
     public static void SetEnemyHitCollider(ref HitCollider hitCollider, int attackType, int character)
     {
-        if (character == 2) {
+        if (character == (int)GeneralEnums.EnemyCharacters.Terry) {
             if ((int)EnemyAttackEnums.TerryAttacks.FarRoundhouse == attackType) {
                 hitCollider.attackName = "Far RoundHouse";
                 hitCollider.attackType = (int)EnemyAttackEnums.TerryAttacks.FarRoundhouse;
                 hitCollider.hurtType = (int)EnemyAttackEnums.TerryAttacksHurtType.FarRoundhouse;
                 hitCollider.screenShakeType = (int)EnemyAttackEnums.TerryAttacksScreenShake.FarRoundhouse;
+                hitCollider.damageValue = 18;
 
                 hitCollider.hitSparkType = (SpecialEffectsEnums.HitSparkType.Mid);
             }
@@ -168,6 +186,16 @@ public class BattleHelper : MonoBehaviour {
                 hitCollider.attackType = (int)EnemyAttackEnums.TerryAttacks.Fierce;
                 hitCollider.hurtType = (int)EnemyAttackEnums.TerryAttacksHurtType.Fierce;
                 hitCollider.screenShakeType = (int)EnemyAttackEnums.TerryAttacksScreenShake.Fierce;
+                hitCollider.damageValue = 12;
+
+                hitCollider.hitSparkType = (SpecialEffectsEnums.HitSparkType.Mid);
+            }
+            else if ((int)EnemyAttackEnums.TerryAttacks.PowerDunk == attackType) {
+                hitCollider.attackName = "PowerDunk";
+                hitCollider.attackType = (int)EnemyAttackEnums.TerryAttacks.PowerDunk;
+                hitCollider.hurtType = (int)EnemyAttackEnums.TerryAttacksHurtType.PowerDunk_0;
+                hitCollider.screenShakeType = (int)EnemyAttackEnums.TerryAttacksScreenShake.PowerDunk;
+                hitCollider.damageValue = 12;
 
                 hitCollider.hitSparkType = (SpecialEffectsEnums.HitSparkType.Mid);
             }

@@ -22,7 +22,16 @@ public class EnemyMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if (enemySense.isPlayerInRange && canMove) {
+        if (enemyController.isDefeated) {
+            enabled = false;
+        }
+        if (enemyController.canMove) {
+            GetEnemyMovement();
+        }
+    }
+
+    void GetEnemyMovement() {
+        if (enemySense.isPlayerInRange && enemyController.canMove) {
             float distanceToTarget = Vector2.Distance(enemySense.targetPosition, transform.position);
             //print(distanceToTarget);
 
@@ -30,7 +39,7 @@ public class EnemyMovement : MonoBehaviour
                 float direction;// = enemyController.isFacingRight ? 1f : -1f;
                 float facingDirection;
 
-                if (!enemySense.isTargetInFront) {         
+                if (!enemySense.isTargetInFront) {    
                     if (enemyController.isFacingRight) {                    
                         facingDirection = 1;
                         enemyController.isFacingRight = false;
@@ -40,7 +49,7 @@ public class EnemyMovement : MonoBehaviour
                         enemyController.isFacingRight = true;
                     }
                 }
-                else {                    
+                else {
                     facingDirection = enemyController.isFacingRight ? -1f : 1f;
                 }
 

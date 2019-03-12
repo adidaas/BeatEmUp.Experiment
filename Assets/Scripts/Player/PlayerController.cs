@@ -10,16 +10,18 @@ public class PlayerController : MonoBehaviour {
     private float activeMoveSpeed;
     private float runSpeed = 20f;
     public Rigidbody2D myRigidbody;
-    
+    private Animator myAnim;
+    private SpriteRenderer mySpriteRenderer;    
     public BoxCollider2D myBoxCollider;
-	public GameObject hitBox;
-	public HitCollider hitCollider;
-    public PlayerSpecialAttacks playerSpecialAttacks;
+	private GameObject hitBox;
+	private HitCollider hitCollider;
+    private PlayerSpecialAttacks playerSpecialAttacks;
     private CharacterEffectController characterEffectController;
     public SpecialMeter specialMeterObject;
     private SpecialMeter specialMeterController;
     public PlayerInfoManager playerInfoManager;
-    public AttackFramesManager attackFramesManager;
+    private AttackFramesManager attackFramesManager;
+    private PlayerHurt playerHurt;
 
     public int playerCharacter = (int)GeneralEnums.PlayerCharacters.Ryu; 
 
@@ -31,16 +33,19 @@ public class PlayerController : MonoBehaviour {
 	public bool canGroundAttack;
 	public bool canAirAttack;
     public bool canDashAttack = false;
+    public bool isCornered = false;
     public float buttonTapCooldown = 0f;
     public int buttonCount = 0;
 
     public bool isAttacking = false;
+    public GameObject airJuggleBoxObject;
 
     // ground checks
     // ==================================
     public Transform groundCheck;
-    public float groundCheckRadius;
-    public LayerMask groundType;
+    private float groundCheckRadius;
+    private LayerMask groundType;
+    public GameObject groundCheckObject;
 
     public bool isGrounded;
     public bool pauseGroundCheck = false;
@@ -49,11 +54,12 @@ public class PlayerController : MonoBehaviour {
     public bool isRunning;
     public bool isJumping;
     public bool isFalling;
-    public Animator myAnim;
-    public SpriteRenderer mySpriteRenderer;
+    public bool isBeingAirJuggle;
+    public bool isAirJuggleable;
+    public bool isInInvincibleState = false;    
     public GameObject ground;
 
-    public  bool inputLeft = false, inputRight = false, inputUp = false, inputDown = false, inputNeutral = true, lastInput = false;
+    public bool inputLeft = false, inputRight = false, inputUp = false, inputDown = false, inputNeutral = true, lastInput = false;
     public bool initialTap = false;
     public bool secondTap = false;
     public bool tapRelease = false;
@@ -75,8 +81,9 @@ public class PlayerController : MonoBehaviour {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         myBoxCollider = GetComponent<BoxCollider2D>();
-		hitCollider = hitBox.GetComponent<HitCollider>();
+		//hitCollider = hitBox.GetComponent<HitCollider>();
         playerSpecialAttacks = GetComponent<PlayerSpecialAttacks>();
+        playerHurt = GetComponent<PlayerHurt>();
         characterEffectController = GetComponent<CharacterEffectController>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
         specialMeterController = specialMeterObject.GetComponent<SpecialMeter>();
@@ -116,6 +123,27 @@ public class PlayerController : MonoBehaviour {
         if (!pauseGroundCheck) {
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundType);
         }
+
+        if (isBeingAirJuggle) {
+			float distanceToGround = groundCheck.position.y - ground.transform.position.y;
+
+			if (distanceToGround <= 1.65f) {
+				isInInvincibleState = true;
+                playerInfoManager.isInInvincibleState = true;
+				//groundCheckCollider.enabled = true;
+				myRigidbody.gravityScale = 3f;
+			}
+		}
+
+        if (isGrounded && isBeingAirJuggle) {
+			isBeingAirJuggle = false;			
+            isFalling = false;
+			//ToggleGroundCheckActive(true);
+            myRigidbody.gravityScale = 5;
+            myAnim.ResetTrigger(GeneralEnums.MovementTriggerNames.AirLanding);
+			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtGround);
+			StartCoroutine(playerHurt.ToggleHurtWakeUp());
+		}
         
         if (isGrounded) {            
             canDash = true;
@@ -124,6 +152,28 @@ public class PlayerController : MonoBehaviour {
             canJump = true;
         }
 
+        // check if close to ground while in air juggle state
+		if (isAirJuggleable) {
+			float distanceToGround = groundCheck.position.y - ground.transform.position.y;
+
+			if (distanceToGround <= 1.65f) {
+				isInInvincibleState = true;
+				
+				myRigidbody.gravityScale = 3f;
+				//currentGravityScale = 3f;
+			}
+		}
+		isCornered = Physics2D.OverlapCircle(gameObject.transform.position, 2f, (int)GeneralEnums.GameObjectLayer.Wall);
+		isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundType);		
+
+		// detect if object has touched the ground after being air juggled
+		if (isGrounded && isAirJuggleable) {
+			isAirJuggleable = false;			
+			ToggleGroundCheckActive(true);
+			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtGround);			
+			StartCoroutine(playerHurt.ToggleHurtWakeUp());
+		}
+        
         // if (buttonTapCooldown > 0f) {
         //     buttonTapCooldown -= 1 * Time.deltaTime;            
         // }
@@ -150,6 +200,11 @@ public class PlayerController : MonoBehaviour {
     public void AdjustSpecialMeter(int amount) {
         playerInfoManager.AdjustSpecialMeter(amount);
     }
+
+    public void ToggleGroundCheckActive(bool isActive) {
+		groundCheckObject.SetActive(isActive);
+		airJuggleBoxObject.SetActive(!isActive);
+	}
 
     public void ResetEverything() {
         canDash = true;

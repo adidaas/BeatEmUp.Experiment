@@ -6,12 +6,18 @@ public class SpecialEffectsEnums : MonoBehaviour {
 
 	public enum HitSparkType { Small = 0, Mid = 1, Big = 2, RyuHadouken = 3, RyuShakunetsu = 4 }
 	public enum RyuSpecialEffectsType { Hadouken = 0 }
-	public enum BattleEffectsUser { Ryu = 0 }
+	public enum TerrySpecialEffectsType { PowerDunk = 0 }
+	public enum BattleEffectsUser { Ryu = 0 }	
 	public enum MovementEffectsType { RunDust = 0 }
 
 	public static class RyuSpecialEffectsTriggerNames {
         public static string Hadouken { get { return "special_Hadouken"; } }
 		public static string Shakunetsu { get { return "special_Shakunetsu"; } }
+    }
+
+	public static class TerrySpecialEffectsTriggerNames {
+        public static string SpecialPowerDunk { get { return "special_PowerDunk"; } }
+		public static string PowerDunkLoop { get { return "powerDunk_Loop"; } }
     }
 
 	public static float GetHitSparkDestoryTime(SpecialEffectsEnums.HitSparkType hitSparkType) {		
@@ -37,6 +43,14 @@ public class SpecialEffectsEnums : MonoBehaviour {
 	public static float GetSpecialEffectsDestoryTime(RyuSpecialEffectsType specialEffectType)	{		
 		if (specialEffectType == RyuSpecialEffectsType.Hadouken) {
 			return 0.85f;
+		}
+
+		return 1.0f;
+	}
+
+	public static float GetEnemySpecialEffectsDestoryTime(int specialEffectType)	{
+		if (specialEffectType == (int)TerrySpecialEffectsType.PowerDunk) {
+			return 0.42f;
 		}
 
 		return 1.0f;

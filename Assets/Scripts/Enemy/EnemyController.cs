@@ -17,6 +17,9 @@ public class EnemyController : MonoBehaviour {
 
 	public int enemyCharacter = (int)GeneralEnums.EnemyCharacters.Terry;
 
+	private int maxHealth = 50;
+	public int currentHealth = 50;
+
 	private float currentGravityScale = 3f;
 	public bool isGrounded;
 	public bool isAirJuggleable = false;
@@ -26,6 +29,9 @@ public class EnemyController : MonoBehaviour {
 	public bool isFacingRight = false;
 	public bool isInLaunchBack = false;
 	public bool isInWallBounce = false;
+	public bool isDefeated = false;
+	public bool canMove = true;
+	public bool canAttack = true;
 	private bool slideParentObject = false;
 	private bool pauseAirSlideTracker = false;
 
@@ -74,6 +80,24 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// defeated check
+		if (currentHealth <= 0) {
+			foreach(AnimatorControllerParameter parameter in myAnim.parameters) {
+				myAnim.ResetTrigger(parameter.name);
+			}
+			enemyAudio.PlayHurtSound((int)GeneralEnums.EnemyCharacters.Terry, (int)GeneralEnums.AttacksHurtType.Defeated);
+			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtDefeated);
+			Destroy(hurtBox);
+			foreach (BoxCollider2D box in GetComponents<BoxCollider2D>()) {
+				Destroy(box);
+			}
+			isDefeated = true;
+			canMove = false;
+			canAttack = false;
+			enabled = false;
+		}
+
+		// check if close to ground while in air juggle state
 		if (isAirJuggleable) {
 			float distanceToGround = groundCheck.position.y - ground.transform.position.y;
 
@@ -171,10 +195,12 @@ public class EnemyController : MonoBehaviour {
 		myAnim.SetBool("isGrounded", isGrounded);
 	}
 
-	public void IsHit(int hurtType, float knockBackDistance, bool knockBackLeft, float hitStop) {
+	public void IsHit(int hurtType, float knockBackDistance, bool knockBackLeft, float hitStop, int damageValue) {
 		//knockBackDistance = 0.0f;
 		playerInfoManager.AdjustSpecialMeter(10);
-		enemyMovement.canMove = false;
+		currentHealth -= damageValue;
+		canMove = false;
+		canAttack = false;
 		float verticalKnockBack = myRigidbody.velocity.y;
 		float direction = 1.0f;
 		float hitshakeDuration = 0.2f;
@@ -369,7 +395,8 @@ public class EnemyController : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}		
 		myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtWakeUp);
-		enemyMovement.canMove = true;		
+		canMove = true;		
+		canAttack = true;
 	}
 	#endregion
 

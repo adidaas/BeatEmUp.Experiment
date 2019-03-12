@@ -11,7 +11,7 @@ public class HitCollider : MonoBehaviour {
 	public float knockBackDistance;
 	public float hitStop;
 	public int screenShakeType;
-    public float damageValue;
+    public int damageValue;
 	public SpecialEffectsEnums.HitSparkType hitSparkType;
 	public bool destroyOnHit = false;
 	public GameObject parentObject;
@@ -84,7 +84,10 @@ public class HitCollider : MonoBehaviour {
 		RaycastHit2D checkUpRight = Physics2D.Raycast(checkUpRightStartingPosition, Vector2.up, 3.3f, layerMask);
 
 		// player hit box
-		if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.EnemyHurtBox) {	
+		if (gameObject.tag == GeneralEnums.GameObjectTags.PlayerHitbox && other.tag == GeneralEnums.GameObjectTags.EnemyHurtBox) {	
+			print(gameObject.tag);
+			print(other.tag);
+			print("player hitboxing");
 			var enemyController = other.transform.parent.gameObject.GetComponent<EnemyController>();
 
 			// if enemy is invincible state, ignore hit colliders
@@ -139,7 +142,7 @@ public class HitCollider : MonoBehaviour {
 				|| (checkUpRight.collider != null && checkUpRight.transform.gameObject == other.transform.parent.gameObject) ) {
 				 knockbackLeft = false;
 			}   		
-			enemyController.IsHit(hurtType, knockBackDistance, !isFacingRight, hitStop);
+			enemyController.IsHit(hurtType, knockBackDistance, !isFacingRight, hitStop, damageValue);
 
 			// Combo Counter
 			// =================================			
@@ -160,14 +163,14 @@ public class HitCollider : MonoBehaviour {
         }
 
 		// enemy hit box
-		if (other.tag != gameObject.tag && other.tag == GeneralEnums.GameObjectTags.PlayerHurtBox) {	
+		if (gameObject.tag == GeneralEnums.GameObjectTags.EnemyHitbox && other.tag == GeneralEnums.GameObjectTags.PlayerHurtBox) {	
 			var playerHurt = other.transform.parent.gameObject.GetComponent<PlayerHurt>();
 			var playerController = other.transform.parent.gameObject.GetComponent<PlayerController>();
 			playerController.canMove = false;
 			playerController.canGroundAttack = false;
 
-			// if enemy is invincible state, ignore hit colliders
-			if (playerHurt.isInInvincibleState) {
+			// if player is invincible state, ignore hit colliders
+			if (playerController.isInInvincibleState) {
 				yield break;
 			}			
 
@@ -176,15 +179,21 @@ public class HitCollider : MonoBehaviour {
 				Destroy(parentObject, 0.01f);
 			}
 
-			parentEnemyAudio.PlayHitSound(parentEnemyController.enemyCharacter, attackType);
+			if (parentObject.tag == GeneralEnums.GameObjectTags.Player) { 
+				parentEnemyAudio.PlayHitSound(parentEnemyController.enemyCharacter, attackType);
+				isFacingRight = parentEnemyController.isFacingRight;
+			}
+			else if (parentObject.tag == GeneralEnums.GameObjectTags.BattleEffects) {
+				isFacingRight = effectsController.isFacingRight;
+				effectsController.PlaySoundEffect(attackType);
+			}
 
 			// Hit spark
 			// =================================
 			Vector3 hitSparkSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
 			hitSparkSpawnPosition.z = -1;
 			Quaternion randomZRotation = this.transform.rotation; // new Vector3(0, 0, Random.Range(0.0f, 360.0f));
-			var randomNumber = GetRandomNumber();
-			
+			var randomNumber = GetRandomNumber();			
 
 			GameObject hitSparkInstance = Instantiate(hitSpark, hitSparkSpawnPosition, Quaternion.Euler(new Vector3(0, 0, randomNumber)));
 			hitSparkInstance.transform.Rotate(new Vector3(0, 0, GetRandomNumber()));
@@ -208,8 +217,7 @@ public class HitCollider : MonoBehaviour {
 				|| (checkUpRight.collider != null && checkUpRight.transform.gameObject == other.transform.parent.gameObject) ) {
 				 knockbackLeft = false;
 			}   		
-			playerHurt.IsHit(hurtType, knockBackDistance, !isFacingRight, hitStop);
-			playerHurt.PlaySoundEffect(hurtType);
+			playerHurt.IsHit(hurtType, knockBackDistance, isFacingRight, hitStop, damageValue);
 		}
     }
 

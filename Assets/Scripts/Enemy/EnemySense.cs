@@ -84,7 +84,7 @@ public class EnemySense : MonoBehaviour
             isTargetInFront = true;
             return true;
         }
-        else {
+        else {            
             isTargetInFront = false;
             return true;            
         }

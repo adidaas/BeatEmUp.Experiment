@@ -14,6 +14,8 @@ public class PlayerInfoManager : MonoBehaviour {
 	[Range(0f, 100f)]
 	public int currentSpecialLevel;
 
+	public bool isInInvincibleState = false;
+
 	void Start () {
 		
 	}
@@ -26,6 +28,11 @@ public class PlayerInfoManager : MonoBehaviour {
 			specialMeter.ChangeSpecialLevel(1);
 		}
 	}
+
+	public void AdjustHealthMeter(int amount) {
+        currentHealth += amount;
+		playerHealth.healthTarget = currentHealth;
+    }
 
 	public void AdjustSpecialMeter(int amount) {
         currentSpecial += amount;

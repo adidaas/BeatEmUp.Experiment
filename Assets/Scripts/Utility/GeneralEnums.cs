@@ -5,7 +5,7 @@ using UnityEngine;
 public class GeneralEnums : MonoBehaviour {    
 
 	public enum AttacksHurtType { 
-		High = 0, Mid = 1, Launch = 2, Air = 3, LaunchBack = 4, WallBounce = 5
+		High = 0, Mid = 1, Launch = 2, Air = 3, LaunchBack = 4, WallBounce = 5, Defeated = 6
 	}
 
 	public enum ScreenShakeType { 
@@ -28,6 +28,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string HurtAir { get { return "hurt_Air"; } }
 		public static string HurtGround { get { return "hurt_Ground"; } }
 		public static string HurtFalling { get { return "hurt_Falling"; } }
+		public static string HurtDefeated { get { return "hurt_Defeated"; } }		
 	}
 
 	public static class GameObjectTags {
@@ -41,8 +42,10 @@ public class GeneralEnums : MonoBehaviour {
 		public static string BattleEffects { get { return "BattleEffects"; } }
 		public static string CharacterEffects { get { return "CharacterEffects"; } }
 		public static string WorldEffects { get { return "WorldEffects"; } }
+		public static string PlayerHitbox { get { return "PlayerHitbox"; } }
 		public static string StyleManager { get { return "StyleManager"; } }		
 		public static string PlayerHurtBox { get { return "PlayerHurtBox"; } }
+		public static string EnemyHitbox { get { return "EnemyHitbox"; } }
 	}
 
 	public static class GameObjectLayer {
@@ -64,14 +67,15 @@ public class GeneralEnums : MonoBehaviour {
 		public static string AirIdle { get { return "air_Idle"; } }
 		public static string AirFalling { get { return "air_Falling"; } }
 		public static string AirLanding { get { return "air_Landing"; } }
+		public static string CrouchToStanding { get { return "crouch_ToStanding"; } }
 	}
 
 	public enum PlayerCharacters {
-		Ryu = 1
+		None = 0, Ryu = 1
 	}
 
 	public enum EnemyCharacters {
-		Terry = 1
+		None = 0, Terry = 1
 	}
 
 }

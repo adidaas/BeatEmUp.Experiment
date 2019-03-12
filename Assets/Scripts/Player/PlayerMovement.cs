@@ -36,9 +36,107 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        GetPlayerMovementControl();
-    }
+        if (playerController.isJumping) {
+            if (!playerController.isFalling) {
+                if (gameObject.transform.position.y >= previousYPosition) {
+                    previousYPosition = gameObject.transform.position.y;
+                }
+                else {
+                    myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.AirFalling);
+                    playerController.isFalling = true;
+                    playerController.isJumping = false;
+                    myAnim.SetBool("IsJumping", playerController.isJumping);
+                }
+            }
+		}
 
+        if (playerController.isFalling) {
+            float distanceToGround = playerController.groundCheck.position.y - playerController.ground.transform.position.y;
+
+			if (distanceToGround <= 2.65f) {
+				playerController.canAirAttack = false;
+			}
+
+            if (playerController.isGrounded && !playerController.isBeingAirJuggle) {
+                playerController.isJumping = false;			
+                playerController.isFalling = false;
+                myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.AirLanding);
+            }
+        }
+
+        if (!playerController.isGrounded) {
+            Vector2 leftRaycastStartingPosition = new Vector2(transform.position.x - 0.8f, transform.position.y - 0.2f );
+            Vector2 leftMiddleRaycastStartingPosition = new Vector2(transform.position.x - 0.0f, transform.position.y - 0.2f );
+            Vector2 middleLeftRaycastStartingPosition = new Vector2(transform.position.x - 0.2f, transform.position.y - 0.6f );
+			Vector2 middleRightRaycastStartingPosition = new Vector2(transform.position.x + 0.2f, transform.position.y - 0.6f );
+            Vector2 rightMiddleRaycastStartingPosition = new Vector2(transform.position.x + 0.0f, transform.position.y - 0.2f );
+            Vector2 rightRaycastStartingPosition = new Vector2(transform.position.x + 0.8f, transform.position.y - 0.2f );
+            
+            int layerMask = LayerMask.GetMask("Enemy");
+
+            RaycastHit2D leftRaycastHit = Physics2D.Raycast(leftRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+            RaycastHit2D leftMiddleRaycastHit = Physics2D.Raycast(leftMiddleRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+            RaycastHit2D middleLeftRaycastHit = Physics2D.Raycast(middleLeftRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+			RaycastHit2D middleRightRaycastHit = Physics2D.Raycast(middleRightRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+            RaycastHit2D rightRaycastHit = Physics2D.Raycast(rightRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+            RaycastHit2D rightMiddleRaycastHit = Physics2D.Raycast(rightMiddleRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
+            if (leftRaycastHit.collider != null && leftMiddleRaycastHit.collider != null) {
+                var enemyController = leftRaycastHit.transform.GetComponent<EnemyController>();
+                if (enemyController.isCornered && !enemyController.isFacingRight) {
+                    StartCoroutine(enemyController.SlideObjectOutOfCorner(true));
+                }
+                Debug.DrawRay(leftRaycastStartingPosition, leftRaycastHit.point, Color.blue, 1.2f);
+                Debug.DrawRay(leftMiddleRaycastStartingPosition, leftMiddleRaycastHit.point, Color.blue, 1.2f);
+                if (!slidePlayerOverObject) {
+                    slidePlayerOverObject = true;
+                    StartCoroutine(SlideOverObject(false, 9f));
+                }
+                
+            }
+            else if (rightMiddleRaycastHit.collider != null && rightRaycastHit.collider != null) {
+                var enemyController = rightMiddleRaycastHit.transform.GetComponent<EnemyController>();
+                if (enemyController.isCornered && enemyController.isFacingRight) {
+                     StartCoroutine(enemyController.SlideObjectOutOfCorner(false));
+                }
+                else {
+                    Debug.DrawRay(rightRaycastStartingPosition, rightRaycastHit.point, Color.green, 1.2f);
+                    Debug.DrawRay(rightMiddleRaycastStartingPosition, rightMiddleRaycastHit.point, Color.green, 1.2f);
+                    if (!slidePlayerOverObject) {
+                        slidePlayerOverObject = true;
+                        StartCoroutine(SlideOverObject(true, 9f));
+                    }
+                }
+                
+            }
+            // else if (middleLeftRaycastHit.collider != null && middleRightRaycastHit.collider != null) {
+			// 	Debug.DrawRay(middleLeftRaycastStartingPosition, middleLeftRaycastHit.point, Color.gray, 1.2f);
+			// 	Debug.DrawRay(middleRightRaycastStartingPosition, middleRightRaycastHit.point, Color.grey, 1.2f);
+			// 	if (!slidePlayerOverObject) {
+			// 		slidePlayerOverObject = true;
+			// 		StartCoroutine(SlideOverObject(playerController.isFacingRight, 4f));
+			// 	}
+			// }
+            else {
+                slidePlayerOverObject = false;
+            }
+        }
+        else {
+            slidePlayerOverObject = false;
+            float startingXPosition = playerController.isFacingRight ? 1.3f : -1.3f;
+
+            int layerMask = LayerMask.GetMask("Enemy", "Wall");
+            Vector2 raycastPosition = new Vector2(transform.position.x + startingXPosition, transform.position.y);
+            RaycastHit2D raycastHit = Physics2D.Raycast(raycastPosition, Vector2.left, 0.3f, layerMask);
+            if (raycastHit.collider != null) {
+                Debug.DrawRay(raycastPosition, raycastHit.point, Color.red, 1.2f);
+                myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
+            }      
+        }
+
+        if (playerController.canMove) {
+            GetPlayerMovementControl();
+        }
+    }
     
     #region Movement Control
     public void GetPlayerMovementControl() {
@@ -104,14 +202,12 @@ public class PlayerMovement : MonoBehaviour
             if (dPadAxis > playerController.previousDPadAxis) {                
                 if (playerController.initialTap && currentMovementKey == previousMovementKey) {
                     playerController.secondTap = true;
-                    print("playerController.secondTap");
                 }       
                 playerController.initialTap = true;
                 playerController.buttonTapCooldown = 0.18f;             
             }
             else if (dPadAxis < playerController.previousDPadAxis && dPadAxis == 0){
                 playerController.tapRelease = true;
-                print("release");
             }
 
             // dpad left
@@ -266,6 +362,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }        
         
+        // jumping
         if (playerController.canJump && !playerController.isAttacking) {
             if (Input.GetButtonDown("Jump") && playerController.isGrounded) {
                 //myAnim.SetBool("playerController.isGrounded", false);
@@ -275,117 +372,17 @@ public class PlayerMovement : MonoBehaviour
                 playerController.canGroundAttack = false;
                 playerController.canAirAttack = true;
                 playerController.canJump = false;
-                
+
                 playerController.isJumping = true;                
                 previousYPosition = gameObject.transform.position.y;
                 myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.MoveJump);
                 characterEffectController.InitializeAnimationEffect(CharacterEffectsEnums.MovementEffectsType.JumpDust02, playerController.isFacingRight);                
-                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpSpeed + 15f);                
+                myRigidbody.velocity = new Vector2(0, jumpSpeed + 15f);
                 myAnim.SetBool("IsJumping", playerController.isJumping);
                 
                 StartCoroutine(UnpauseGroundCheck());
                 //soundJump.Play();
             }
-        }
-
-        if (playerController.isJumping) {
-            if (!playerController.isFalling) {
-                if (gameObject.transform.position.y >= previousYPosition) {
-                    previousYPosition = gameObject.transform.position.y;
-                }
-                else {
-                    myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.AirFalling);
-                    playerController.isFalling = true;
-                    playerController.isJumping = false;
-                    myAnim.SetBool("IsJumping", playerController.isJumping);
-                }
-            }
-		}
-
-        if (playerController.isFalling) {
-            float distanceToGround = playerController.groundCheck.position.y - playerController.ground.transform.position.y;
-			//print(distanceToGround);
-			//print("");
-            
-
-			if (distanceToGround <= 2.65f) {
-				playerController.canAirAttack = false;
-			}
-
-            if (playerController.isGrounded) {
-                playerController.isJumping = false;			
-                playerController.isFalling = false;
-                myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.AirLanding);
-            }
-        }
-
-        if (!playerController.isGrounded) {
-            Vector2 leftRaycastStartingPosition = new Vector2(transform.position.x - 0.8f, transform.position.y - 0.2f );
-            Vector2 leftMiddleRaycastStartingPosition = new Vector2(transform.position.x - 0.0f, transform.position.y - 0.2f );
-            Vector2 middleLeftRaycastStartingPosition = new Vector2(transform.position.x - 0.2f, transform.position.y - 0.6f );
-			Vector2 middleRightRaycastStartingPosition = new Vector2(transform.position.x + 0.2f, transform.position.y - 0.6f );
-            Vector2 rightMiddleRaycastStartingPosition = new Vector2(transform.position.x + 0.0f, transform.position.y - 0.2f );
-            Vector2 rightRaycastStartingPosition = new Vector2(transform.position.x + 0.8f, transform.position.y - 0.2f );
-            
-            int layerMask = LayerMask.GetMask("Enemy");
-
-            RaycastHit2D leftRaycastHit = Physics2D.Raycast(leftRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-            RaycastHit2D leftMiddleRaycastHit = Physics2D.Raycast(leftMiddleRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-            RaycastHit2D middleLeftRaycastHit = Physics2D.Raycast(middleLeftRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-			RaycastHit2D middleRightRaycastHit = Physics2D.Raycast(middleRightRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-            RaycastHit2D rightRaycastHit = Physics2D.Raycast(rightRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-            RaycastHit2D rightMiddleRaycastHit = Physics2D.Raycast(rightMiddleRaycastStartingPosition, Vector2.down, 1.5f, layerMask);
-            if (leftRaycastHit.collider != null && leftMiddleRaycastHit.collider != null) {
-                var enemyController = leftRaycastHit.transform.GetComponent<EnemyController>();
-                if (enemyController.isCornered && !enemyController.isFacingRight) {
-                    StartCoroutine(enemyController.SlideObjectOutOfCorner(true));
-                }
-                Debug.DrawRay(leftRaycastStartingPosition, leftRaycastHit.point, Color.blue, 1.2f);
-                Debug.DrawRay(leftMiddleRaycastStartingPosition, leftMiddleRaycastHit.point, Color.blue, 1.2f);
-                if (!slidePlayerOverObject) {
-                    slidePlayerOverObject = true;
-                    StartCoroutine(SlideOverObject(false, 9f));
-                }
-                
-            }
-            else if (rightMiddleRaycastHit.collider != null && rightRaycastHit.collider != null) {
-                var enemyController = rightMiddleRaycastHit.transform.GetComponent<EnemyController>();
-                if (enemyController.isCornered && enemyController.isFacingRight) {
-                     StartCoroutine(enemyController.SlideObjectOutOfCorner(false));
-                }
-                else {
-                    Debug.DrawRay(rightRaycastStartingPosition, rightRaycastHit.point, Color.green, 1.2f);
-                    Debug.DrawRay(rightMiddleRaycastStartingPosition, rightMiddleRaycastHit.point, Color.green, 1.2f);
-                    if (!slidePlayerOverObject) {
-                        slidePlayerOverObject = true;
-                        StartCoroutine(SlideOverObject(true, 9f));
-                    }
-                }
-                
-            }
-            // else if (middleLeftRaycastHit.collider != null && middleRightRaycastHit.collider != null) {
-			// 	Debug.DrawRay(middleLeftRaycastStartingPosition, middleLeftRaycastHit.point, Color.gray, 1.2f);
-			// 	Debug.DrawRay(middleRightRaycastStartingPosition, middleRightRaycastHit.point, Color.grey, 1.2f);
-			// 	if (!slidePlayerOverObject) {
-			// 		slidePlayerOverObject = true;
-			// 		StartCoroutine(SlideOverObject(playerController.isFacingRight, 4f));
-			// 	}
-			// }
-            else {
-                slidePlayerOverObject = false;
-            }
-        }
-        else {
-            slidePlayerOverObject = false;
-            float startingXPosition = playerController.isFacingRight ? 1.3f : -1.3f;
-
-            int layerMask = LayerMask.GetMask("Enemy", "Wall");
-            Vector2 raycastPosition = new Vector2(transform.position.x + startingXPosition, transform.position.y);
-            RaycastHit2D raycastHit = Physics2D.Raycast(raycastPosition, Vector2.left, 0.3f, layerMask);
-            if (raycastHit.collider != null) {
-                Debug.DrawRay(raycastPosition, raycastHit.point, Color.red, 1.2f);
-                myRigidbody.velocity = new Vector2(0, myRigidbody.velocity.y);
-            }      
         }
 
         if (playerController.canMove && !playerController.isAttacking && !playerController.isDashing && !playerController.isRunning) {  
@@ -432,7 +429,7 @@ public class PlayerMovement : MonoBehaviour
                 // idle
                 myAnim.SetBool("IsWalking", false);                
                 myAnim.SetBool("IsRunning", false);
-                myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
+                myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);                
             }
             
         }

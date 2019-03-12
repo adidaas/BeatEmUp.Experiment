@@ -11,6 +11,7 @@ public class PlayerSpecialAttacks : MonoBehaviour {
 	private float targetXPosition;
 	private Rigidbody2D myRigidbody;
 	private bool isEXAttack = false;
+	private int currentStep = 0;
 
 	void Start() {
 		playerController = gameObject.GetComponent<PlayerController>();
@@ -18,6 +19,7 @@ public class PlayerSpecialAttacks : MonoBehaviour {
 	}
 
     public void InitializeRyuSpecialAttack(PlayerAttackEnums.RyuAttacks attackType, bool isFacingRightCheck, bool isEXKeyActive = false) {
+		currentStep = 0;
 		isFacingRight = isFacingRightCheck;
 		float animationDelay = 0f;
 		isEXAttack = isEXKeyActive ? true : false;
@@ -75,7 +77,7 @@ public class PlayerSpecialAttacks : MonoBehaviour {
 			
 			EffectsController effectsController = ryuFireballInstance.GetComponent<EffectsController>();
 			effectsController.isFacingRight = isFacingRight;
-			effectsController.battleEffectsUser = SpecialEffectsEnums.BattleEffectsUser.Ryu;
+			effectsController.playerUser = GeneralEnums.PlayerCharacters.Ryu;
 			effectsController.PlaySpecialEffects((int)SpecialEffectsEnums.RyuSpecialEffectsType.Hadouken, isEXAttack);
 
 			var timeToLive = SpecialEffectsEnums.GetSpecialEffectsDestoryTime(SpecialEffectsEnums.RyuSpecialEffectsType.Hadouken);
