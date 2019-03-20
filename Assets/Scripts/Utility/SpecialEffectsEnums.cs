@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpecialEffectsEnums : MonoBehaviour {
 
-	public enum HitSparkType { Small = 0, Mid = 1, Big = 2, RyuHadouken = 3, RyuShakunetsu = 4 }
+	public enum HitSparkType { Small = 0, Mid = 1, Big = 2, RyuHadouken = 3, RyuShakunetsu = 4, GuardCrush = 5 }
 	public enum RyuSpecialEffectsType { Hadouken = 0 }
 	public enum TerrySpecialEffectsType { PowerDunk = 0 }
 	public enum BattleEffectsUser { Ryu = 0 }	

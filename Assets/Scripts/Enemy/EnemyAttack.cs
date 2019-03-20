@@ -82,7 +82,7 @@ public class EnemyAttack : MonoBehaviour
 
         // terry normal attacks
         //if (5 == 3) {
-        if (!enemyController.playerInfoManager.isInInvincibleState) {
+        if (!enemyController.playerInfoManager.isInInvincibleState && !isAttacking) {
             // far roundhouse
             if (leftRaycastHit.collider != null || rightRaycastHit.collider != null) {
                 float distance;
@@ -94,25 +94,24 @@ public class EnemyAttack : MonoBehaviour
                     distance = Vector2.Distance(rightRaycastHit.transform.position, transform.position);
                 }
 
-                if (antiAirRaycastHit.collider != null) {
-                    if (!isAttacking) {
-                        
-                        enemyController.canMove = false;
-                        currentAttackType = (int)EnemyAttackEnums.TerryAttacks.PowerDunk;
-                        BattleHelper.SetEnemyHitCollider(ref hitCollider, (int)EnemyAttackEnums.TerryAttacks.PowerDunk, (int)GeneralEnums.EnemyCharacters.Terry);
-                        enemyAudio.PlayAttackSound((int)GeneralEnums.EnemyCharacters.Terry, (int)EnemyAttackEnums.TerryAttacks.PowerDunk, 0);
-                        attackFramesManager.SetAttackFrames((int)EnemyAttackEnums.TerryAttacks.PowerDunk, 2);
-                        myAnim.SetTrigger(EnemyAttackEnums.AttackTriggerNames.SpecialPowerDunk);
-                        isAttacking = true;
-                        attackCooldown = 2;
-                        trackAttackCooldown = true;
-                        isFrameTracking = true;
+                //if (antiAirRaycastHit.collider != null) {
+                     if (5 == 4) {
+                    enemyController.canMove = false;
+                    currentAttackType = (int)EnemyAttackEnums.TerryAttacks.PowerDunk;
+                    BattleHelper.SetEnemyHitCollider(ref hitCollider, (int)EnemyAttackEnums.TerryAttacks.PowerDunk, (int)GeneralEnums.EnemyCharacters.Terry);
+                    enemyAudio.PlayAttackSound((int)GeneralEnums.EnemyCharacters.Terry, (int)EnemyAttackEnums.TerryAttacks.PowerDunk, 0);
+                    attackFramesManager.SetAttackFrames((int)EnemyAttackEnums.TerryAttacks.PowerDunk, 2);
+                    myAnim.SetTrigger(EnemyAttackEnums.AttackTriggerNames.SpecialPowerDunk);
+                    isAttacking = true;
+                    attackCooldown = 2;
+                    trackAttackCooldown = true;
+                    isFrameTracking = true;
 
-                        enemySpecialAttack.InitializeSpecialAttack((int)EnemyAttackEnums.TerryAttacks.PowerDunk, enemyController.isFacingRight);
-                    } 
+                    enemySpecialAttack.InitializeSpecialAttack((int)EnemyAttackEnums.TerryAttacks.PowerDunk, enemyController.isFacingRight);
+                
                 }
-                //else if (distance < 5f && distance > 3.95f) {
-                    else if (5 == 4) {
+                else if (distance < 5f && distance > 3.95f) {
+                    //else if (5 == 4) {
                     //Debug.DrawRay(leftRaycastStartingPosition, leftRaycastHit.point, Color.white, 1.2f);            
                     //Debug.DrawRay(rightRaycastStartingPosition, rightRaycastHit.point, Color.white, 1.2f);
                     if (!isAttacking) {
@@ -125,8 +124,8 @@ public class EnemyAttack : MonoBehaviour
                         attackCooldown = 1;
                     } 
                 }
-                //else if (distance < 3.95f) {
-                    else if (5 == 4) {
+                else if (distance < 3.95f) {
+                    //else if (5 == 4) {
                     //Debug.DrawRay(leftRaycastStartingPosition, leftRaycastHit.point, Color.white, 1.2f);            
                     //Debug.DrawRay(rightRaycastStartingPosition, rightRaycastHit.point, Color.white, 1.2f);
                     if (!isAttacking) {

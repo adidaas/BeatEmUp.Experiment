@@ -21,7 +21,6 @@ public class PlayerHurt : MonoBehaviour
 
 	public int playerHurtType;
 
-    // Start is called before the first frame update
     void Start() {
         playerController = gameObject.GetComponent<PlayerController>();
         playerAudio = gameObject.GetComponent<PlayerAudio>();
@@ -30,9 +29,16 @@ public class PlayerHurt : MonoBehaviour
         myRigidbody = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update() {		
-    }
+	public bool HitWhileBlocking(int damageValue) {
+		playerInfoManager.AdjustBlockValue(damageValue);
+
+		// if guardValue is below or equal to 0, than player has been guard crush. return false to play guard crush animation
+		if (playerInfoManager.currentGuardValue <= 0) {
+			return false;
+		}
+		
+		return true;
+	}
 
     public void IsHit(int hurtType, float knockBackDistance, bool isEnemyFacingRight, float hitStop, int damageValue) {
 		playerHurtType = hurtType;
@@ -106,11 +112,10 @@ public class PlayerHurt : MonoBehaviour
 		float direction = playerController.isFacingRight ? -1.0f: 1.0f;
 		if (currentStep == 0) {
 			if (playerController.isCornered) {
-				nextPosition = new Vector2 (myRigidbody.velocity.x * direction, myRigidbody.velocity.y + 22);
+				nextPosition = new Vector2 (myRigidbody.velocity.x * direction, myRigidbody.velocity.y + 23);
 			}
 			else {
-				nextPosition = new Vector2 (myRigidbody.velocity.x + 13 * direction, myRigidbody.velocity.y + 22);
-				print("fly high -----------");
+				nextPosition = new Vector2 (myRigidbody.velocity.x + 24 * direction, myRigidbody.velocity.y + 23);
 			}
 			
 			myRigidbody.velocity = nextPosition;
@@ -119,7 +124,7 @@ public class PlayerHurt : MonoBehaviour
 			StartCoroutine(waitToPlayRoutine);
 		}
 		else if (currentStep == 1) {
-			print("2222222222222222222222222");
+			playerController.pauseGroundCheck = false;
 			animationDelay = 0.5f;
 			isAnimationDone = true;
 			myRigidbody.gravityScale = 4f;
@@ -146,7 +151,7 @@ public class PlayerHurt : MonoBehaviour
 
     public IEnumerator PerformHitStun(float hitStunTime, GeneralEnums.AttacksHurtType hurtType) {
 		yield return new WaitForSeconds(hitStunTime);	
-		
+		print("hitstrun");
 		if (hurtType == GeneralEnums.AttacksHurtType.High) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtHighRecover);
 			playerController.canMove = true;
@@ -156,7 +161,8 @@ public class PlayerHurt : MonoBehaviour
 			playerController.canMove = true;
 		}	
 		else if (hurtType == GeneralEnums.AttacksHurtType.Launch) {		
-			isAnimationDone = false;
+			print("launch");
+			isAnimationDone = false;			
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtLaunch);
 			HurtLaunch_MovePosition();
 		}	

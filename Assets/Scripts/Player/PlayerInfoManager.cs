@@ -13,6 +13,8 @@ public class PlayerInfoManager : MonoBehaviour {
 	public int currentSpecial;
 	[Range(0f, 100f)]
 	public int currentSpecialLevel;
+	[Range(0f, 80f)]
+	public float currentGuardValue = 40;
 
 	public bool isInInvincibleState = false;
 
@@ -26,6 +28,10 @@ public class PlayerInfoManager : MonoBehaviour {
 			currentSpecialLevel++;
 			specialMeter.ChangeSpecial(-100);
 			specialMeter.ChangeSpecialLevel(1);
+		}
+
+		if (currentGuardValue < 80) {
+			currentGuardValue += (0.8f * Time.deltaTime);
 		}
 	}
 
@@ -42,5 +48,9 @@ public class PlayerInfoManager : MonoBehaviour {
 	public void ChangeSpecialLevel(int specialAmountToChange) {
 		currentSpecialLevel += specialAmountToChange;		
 		specialMeter.ChangeSpecialLevel(specialAmountToChange);
+	}
+
+	public void AdjustBlockValue(int amount) {
+		currentGuardValue -= amount;
 	}
 }

@@ -46,6 +46,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string StyleManager { get { return "StyleManager"; } }		
 		public static string PlayerHurtBox { get { return "PlayerHurtBox"; } }
 		public static string EnemyHitbox { get { return "EnemyHitbox"; } }
+		public static string EnemyInfoManager { get { return "EnemyInfoManager"; } }
 	}
 
 	public static class GameObjectLayer {
@@ -57,7 +58,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static int Enemy { get { return 13; } }
 		public static int Player { get { return 14; } }
 		public static int ComboCounter { get { return 15; } }
-		public static int Wall { get { return 16; } }		
+		public static int Wall { get { return 16; } }
 	}
 
 	public static class MovementTriggerNames {

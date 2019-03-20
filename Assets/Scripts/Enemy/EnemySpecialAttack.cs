@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpecialAttack : MonoBehaviour
 {
+    private EnemyController enemyController;
     private EnemyAttack enemyAttack;
     public GameObject terrySpecialEffect;
     private Vector3 spawnPosition;
@@ -16,6 +17,7 @@ public class EnemySpecialAttack : MonoBehaviour
     private int currentStep = 0;
 
     private void Start() {
+        enemyController = gameObject.GetComponent<EnemyController>();
         enemyAttack = gameObject.GetComponent<EnemyAttack>();
         myRigidbody = gameObject.GetComponent<Rigidbody2D>();
         myAnim = gameObject.GetComponent<Animator>();
@@ -49,12 +51,12 @@ public class EnemySpecialAttack : MonoBehaviour
             if (currentStep == 0) {
                 myRigidbody.velocity = new Vector2(targetXPosition, targetYPosition);
                 currentStep++;
+                enemyController.myBoxCollider.enabled = false;
+                StartCoroutine(WaitToEnableBoxCollider(0.24f));
+
                 StartCoroutine(WaitToPlay(0.27f, attackType));
             }
             else if (currentStep == 1) {
-                myRigidbody.AddForce(targetPosition, ForceMode2D.Impulse);
-				StartCoroutine(WaitToChangeBodyType());
-
                 // power dunk effect prefab
                 GameObject terrySpecialEffectInstanceBurst = Instantiate(terrySpecialEffect, spawnPosition, this.transform.rotation);
                 terrySpecialEffectInstanceBurst.transform.localScale = isFacingRight ? new Vector2(-1f, 1f) : new Vector2(1f, 1f);
@@ -91,9 +93,13 @@ public class EnemySpecialAttack : MonoBehaviour
             else if (currentStep == 2) {
                 myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.CrouchToStanding);
                 currentStep++;
-                enemyAttack.isAttacking = false;
-                
+                enemyAttack.isAttacking = false;                
             }
 		}
     }
+
+    public IEnumerator WaitToEnableBoxCollider(float duration) {
+		yield return new WaitForSeconds(duration);
+		enemyController.myBoxCollider.enabled = true;
+	}
 }

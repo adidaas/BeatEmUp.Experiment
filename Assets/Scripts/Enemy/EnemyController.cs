@@ -14,6 +14,8 @@ public class EnemyController : MonoBehaviour {
 	public PlayerInfoManager playerInfoManager;
 	private EnemyMovement enemyMovement;
 	private EnemyAudio enemyAudio;
+	public BoxCollider2D myBoxCollider;
+	public EnemyInfoManager enemyInfoManager;
 
 	public int enemyCharacter = (int)GeneralEnums.EnemyCharacters.Terry;
 
@@ -66,6 +68,7 @@ public class EnemyController : MonoBehaviour {
 		myRigidbody = GetComponent<Rigidbody2D>();
 		myRigidbody.gravityScale = currentGravityScale;
 		myAnim = gameObject.GetComponent<Animator>();
+		myBoxCollider = gameObject.GetComponent<BoxCollider2D>();
 		ground = GameObject.FindWithTag("Ground");
 		enemyHurt = gameObject.GetComponent<EnemyHurt>();
 		groundCheckCollider = groundCheckObject.GetComponent<BoxCollider2D>();
@@ -73,6 +76,7 @@ public class EnemyController : MonoBehaviour {
 		characterEffectController = gameObject.GetComponent<CharacterEffectController>();
 		enemyMovement = gameObject.GetComponent<EnemyMovement>();
 		enemyAudio = gameObject.GetComponent<EnemyAudio>();
+		enemyInfoManager = GameObject.FindGameObjectWithTag(GeneralEnums.GameObjectTags.EnemyInfoManager).GetComponent<EnemyInfoManager>();
 		//StartCoroutine (MoveOverSeconds (gameObject, new Vector3 (0.0f, 10f, 0f), 2f));
 		//StartCoroutine (MoveOverSpeed (gameObject, new Vector3 (0.0f, 10f, 0f), 120f));
 
@@ -197,8 +201,10 @@ public class EnemyController : MonoBehaviour {
 
 	public void IsHit(int hurtType, float knockBackDistance, bool knockBackLeft, float hitStop, int damageValue) {
 		//knockBackDistance = 0.0f;
-		playerInfoManager.AdjustSpecialMeter(10);
+		playerInfoManager.AdjustSpecialMeter(10);		
 		currentHealth -= damageValue;
+		enemyInfoManager.nextEnemyCharacter = (int)GeneralEnums.EnemyCharacters.Terry;
+		enemyInfoManager.AdjustHealthMeter(damageValue, currentHealth, maxHealth);
 		canMove = false;
 		canAttack = false;
 		float verticalKnockBack = myRigidbody.velocity.y;

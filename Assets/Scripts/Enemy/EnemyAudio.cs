@@ -38,6 +38,8 @@ public class EnemyAudio : MonoBehaviour
     public AudioClip soundTerryDefeated;
 	public AudioClip soundBodySlam0;
 
+    
+
     // 0: Light0, 1: Light1, 2: Light2, 3: Light3
     // 4: Medium0, 5: Medium1, 6: Medium2, 7: Medium3
     // 8: Hard0, 9: Hard1, 10: Hard2, 11: Hard3
@@ -49,9 +51,24 @@ public class EnemyAudio : MonoBehaviour
             }
             else if (attackType == (int)EnemyAttackEnums.TerryAttacks.Fierce) {
                 SoundEffectsManager.instance.PlayRandomHitSound(0.5f, 4, 7);
-            }
-     
+            }     
         }
+    }
+
+    public void PlayBlockSound(SpecialEffectsEnums.HitSparkType hitsparkType) {        
+        if (hitsparkType == SpecialEffectsEnums.HitSparkType.Small) {
+            SoundEffectsManager.instance.PlayRandomBlockSound(0.5f, 0, 1);
+        }
+        else if (hitsparkType == SpecialEffectsEnums.HitSparkType.Mid) {
+            SoundEffectsManager.instance.PlayRandomBlockSound(0.5f, 2, 3);
+        }
+        else if (hitsparkType == SpecialEffectsEnums.HitSparkType.Big) {
+            SoundEffectsManager.instance.PlayRandomBlockSound(0.5f, 4);
+        }
+        else if (hitsparkType == SpecialEffectsEnums.HitSparkType.GuardCrush) {
+            SoundEffectsManager.instance.PlayRandomBlockSound(0.4f, 6);
+        }
+    
     }
     
     public void PlayAttackSound(int character, int attackType, int step = 0) {

@@ -133,6 +133,21 @@ public class PlayerMovement : MonoBehaviour
             }      
         }
 
+        #region Blocking
+        if (Input.GetButton("Block")) {
+            playerController.isBlocking = true;
+            playerController.canMove = false;
+            playerController.canGroundAttack = false;
+            myAnim.SetBool("IsBlocking", true);
+        }
+        else if (Input.GetButtonUp("Block")) {
+            playerController.isBlocking = false;
+            playerController.canMove = true;
+            playerController.canGroundAttack = true;
+            myAnim.SetBool("IsBlocking", false);
+        }
+        #endregion
+
         if (playerController.canMove) {
             GetPlayerMovementControl();
         }
@@ -257,6 +272,19 @@ public class PlayerMovement : MonoBehaviour
             playerController.canDashAttack = false;
         }
 
+        if (playerController.initialTap) {
+            if (playerController.buttonTapCooldown > 0f) {
+                playerController.buttonTapCooldown -= 1 * Time.deltaTime;            
+            }
+            else {
+                playerController.initialTap = false;
+                playerController.secondTap = false;
+                playerController.tapRelease = false;
+                playerController.buttonTapCooldown = 0f;
+            }
+        }
+
+        #region Dashing
         // dashmovement
         if (playerController.buttonTapCooldown > 0 && playerController.secondTap) {
             if (myAnim.GetBool("IsWalking") && !playerController.isDashing && playerController.canMove && playerController.canDash && playerController.isGrounded && !playerController.isRunning) {                      
@@ -275,7 +303,10 @@ public class PlayerMovement : MonoBehaviour
                 playerController.buttonTapCooldown = 0;          
             }
         }
+        #endregion
 
+        #region Running
+        // running
         if (playerController.isRunning) {
             if (!isRunEffectPlaying) {
                 StartCoroutine(runEffectCoroutine);
@@ -349,19 +380,9 @@ public class PlayerMovement : MonoBehaviour
                 myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
             }
         }
-        
-        if (playerController.initialTap) {
-            if (playerController.buttonTapCooldown > 0f) {
-                playerController.buttonTapCooldown -= 1 * Time.deltaTime;            
-            }
-            else {
-                playerController.initialTap = false;
-                playerController.secondTap = false;
-                playerController.tapRelease = false;
-                playerController.buttonTapCooldown = 0f;
-            }
-        }        
-        
+        #endregion
+
+        #region Jumping
         // jumping
         if (playerController.canJump && !playerController.isAttacking) {
             if (Input.GetButtonDown("Jump") && playerController.isGrounded) {
@@ -384,7 +405,9 @@ public class PlayerMovement : MonoBehaviour
                 //soundJump.Play();
             }
         }
+        #endregion
 
+        #region Walking
         if (playerController.canMove && !playerController.isAttacking && !playerController.isDashing && !playerController.isRunning) {  
 
             if (playerController.inputRight) {
@@ -433,7 +456,7 @@ public class PlayerMovement : MonoBehaviour
             }
             
         }
-
+        #endregion
           
     }
     #endregion

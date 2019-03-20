@@ -43,8 +43,8 @@ public class AttackFramesManager : MonoBehaviour
     void Update() {
         if (isTrackingFrame) {
             currentFrameCount++;
-            // print(currentFrameCount);
-            // print(currentPhase);
+            //print(currentFrameCount);
+            //print(currentPhase);
             if (isPlayer) {
                 if (currentFrameCount >= cancelWindowFrames) { 
                     isInCancelWindow = true; 
@@ -116,7 +116,7 @@ public class AttackFramesManager : MonoBehaviour
     public void SetHitboxActive() {
         if (currentPhase == Phases.StartUp) {
             //hitBoxGameObject.SetActive(false);
-            hitBoxBoxCollider.enabled = false;
+            //hitBoxBoxCollider.enabled = false;
         }
         else if (currentPhase == Phases.Active) {
             //print("actrive");

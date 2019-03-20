@@ -37,9 +37,17 @@ public class SoundEffectsManager : MonoBehaviour {
     public AudioClip soundHitHard1;
     public AudioClip soundHitHard2;
     public AudioClip soundHitHard3;
+	public AudioClip soundBlockSmall0;
+	public AudioClip soundBlockSmall1;
+	public AudioClip soundBlockMid0;
+    public AudioClip soundBlockMid1;
+	public AudioClip soundBlockBig0;
+	public AudioClip soundBlockBig1;
+	public AudioClip soundGuardCrush;
     public AudioClip soundExActivate;
 	public AudioClip[] swingSoundEffects;
 	public AudioClip[] hitSoundEffects;
+	public AudioClip[] blockSoundEffects;
 	
 	void Start() {
 		//Play the clip.
@@ -59,6 +67,11 @@ public class SoundEffectsManager : MonoBehaviour {
 		hitSoundEffects = new AudioClip[] { soundHitLight0, soundHitLight1, soundHitLight2, soundHitLight3
 											, soundHitMedium0, soundHitMedium1, soundHitMedium2, soundHitMedium3
 											, soundHitHard0, soundHitHard1, soundHitHard2, soundHitHard3};
+
+		blockSoundEffects = new AudioClip[] { soundBlockSmall0, soundBlockSmall1
+											, soundBlockMid0, soundBlockMid0
+											, soundBlockBig0, soundBlockBig1
+											, soundGuardCrush};
 
 	}
 	
@@ -118,6 +131,19 @@ public class SoundEffectsManager : MonoBehaviour {
 		AudioClip[] audioToPlay = new AudioClip[choices.Length];
 		for(int i = 0; i < choices.Length; i++) {			
 			audioToPlay[i] = hitSoundEffects[choices[i]];
+		}
+				
+		RandomizePitch(ref efxSource);
+		
+		int randomIndex = Random.Range(0, audioToPlay.Length);		
+		var clip = audioToPlay[randomIndex];
+		efxSource.PlayOneShot(clip, volume);
+	}
+
+	public void PlayRandomBlockSound(float volume = 0.8f, params int[] choices) {
+		AudioClip[] audioToPlay = new AudioClip[choices.Length];
+		for(int i = 0; i < choices.Length; i++) {			
+			audioToPlay[i] = blockSoundEffects[choices[i]];
 		}
 				
 		RandomizePitch(ref efxSource);

@@ -85,9 +85,9 @@ public class HitCollider : MonoBehaviour {
 
 		// player hit box
 		if (gameObject.tag == GeneralEnums.GameObjectTags.PlayerHitbox && other.tag == GeneralEnums.GameObjectTags.EnemyHurtBox) {	
-			print(gameObject.tag);
-			print(other.tag);
-			print("player hitboxing");
+			// print(gameObject.tag);
+			// print(other.tag);
+			// print("player hitboxing");
 			var enemyController = other.transform.parent.gameObject.GetComponent<EnemyController>();
 
 			// if enemy is invincible state, ignore hit colliders
@@ -168,11 +168,56 @@ public class HitCollider : MonoBehaviour {
 			var playerController = other.transform.parent.gameObject.GetComponent<PlayerController>();
 			playerController.canMove = false;
 			playerController.canGroundAttack = false;
+			//print("Player hit******");
 
-			// if player is invincible state, ignore hit colliders
+			// if player is invincible state; ignore hit colliders
 			if (playerController.isInInvincibleState) {
 				yield break;
-			}			
+			}
+
+			
+			if (playerController.isBlocking) {
+				// if player is blocking and still has guard meter; no damage and play block effect
+				if (playerHurt.HitWhileBlocking(damageValue)) {
+					// block spark
+					// =================================
+					Vector3 blockSparkSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
+					blockSparkSpawnPosition.z = -1;
+
+					var direction = parentEnemyController.isFacingRight ? 1 : -1;
+
+					GameObject blockSparkInstance = Instantiate(hitSpark, blockSparkSpawnPosition, this.transform.rotation);
+					blockSparkInstance.layer = GeneralEnums.GameObjectLayer.SpecialEffects;
+					HitSparksController blockSparkController = blockSparkInstance.GetComponent<HitSparksController>();
+					blockSparkController.PlayBlockSpark(hitSparkType, parentEnemyController.isFacingRight);
+
+					parentEnemyAudio.PlayBlockSound(hitSparkType);
+					var blockSparkTimeToLive = SpecialEffectsEnums.GetHitSparkDestoryTime(hitSparkType);
+
+					Destroy (blockSparkInstance, blockSparkTimeToLive);
+					yield break;
+				}
+				else {
+					print("GUARD CRUSH");
+					// guard meter is below 0; guard crush
+					Vector3 guardCrushSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
+					guardCrushSpawnPosition.z = -1;
+
+					var direction = parentEnemyController.isFacingRight ? 1 : -1;
+
+					GameObject guardCrushInstance = Instantiate(hitSpark, guardCrushSpawnPosition, this.transform.rotation);
+					guardCrushInstance.layer = GeneralEnums.GameObjectLayer.SpecialEffects;
+					HitSparksController guardCrushController = guardCrushInstance.GetComponent<HitSparksController>();
+					guardCrushController.PlayBlockSpark(SpecialEffectsEnums.HitSparkType.GuardCrush, parentEnemyController.isFacingRight);
+
+					parentEnemyAudio.PlayBlockSound(SpecialEffectsEnums.HitSparkType.GuardCrush);					
+					var blockSparkTimeToLive = SpecialEffectsEnums.GetHitSparkDestoryTime(SpecialEffectsEnums.HitSparkType.GuardCrush);
+
+					Destroy (guardCrushInstance, blockSparkTimeToLive);
+					yield break;
+				}
+				
+			}
 
 			// check if this is a special effect that needs to disappear upon hit
 			if (destroyOnHit) {				
