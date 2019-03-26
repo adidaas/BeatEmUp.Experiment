@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed = 10f;
     private float previousYPosition;
 
+    private bool isRollingRight;
+
     public bool slidePlayerOverObject = false;
     public bool isRunEffectPlaying = false;
 
@@ -133,28 +135,6 @@ public class PlayerMovement : MonoBehaviour
             }      
         }
 
-        #region Blocking
-        if (Input.GetButton("Block")) {
-            playerController.isBlocking = true;
-            playerController.canMove = false;
-            playerController.canGroundAttack = false;
-            myAnim.SetBool("IsBlocking", true);
-        }
-        else if (Input.GetButtonUp("Block")) {
-            playerController.isBlocking = false;
-            playerController.canMove = true;
-            playerController.canGroundAttack = true;
-            myAnim.SetBool("IsBlocking", false);
-        }
-        #endregion
-
-        if (playerController.canMove) {
-            GetPlayerMovementControl();
-        }
-    }
-    
-    #region Movement Control
-    public void GetPlayerMovementControl() {
         // detect axis input
         if (Input.GetAxisRaw("DPadX") > 0 || Input.GetAxisRaw("Horizontal") > 0f) {
             //print("right");
@@ -203,6 +183,76 @@ public class PlayerMovement : MonoBehaviour
             playerController.isRunning = false;
             playerController.isDashing = false;
         }
+
+        #region DodgeRoll
+        if (playerController.isBlocking && !playerController.isRolling) {
+            if (playerController.inputRight) {
+                // roll right
+                playerController.isRolling = true;
+                playerController.isInInvincibleState = true;
+                isRollingRight = true;
+                myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.MoveDodgeRoll);
+                transform.localScale = new Vector2(1f, 1f);
+                StartCoroutine(WaitToUnpauseDodgeRoll());
+            }
+            else if (playerController.inputLeft) {
+                // roll left
+                playerController.isRolling = true;
+                playerController.isInInvincibleState = true;
+                isRollingRight = false;
+                myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.MoveDodgeRoll);
+                transform.localScale = new Vector2(-1f, 1f);
+                StartCoroutine(WaitToUnpauseDodgeRoll());
+            }
+        }
+
+        if (playerController.isRolling) {
+            if (isRollingRight) {
+                // roll right
+                transform.localScale = new Vector2(1f, 1f);
+                myRigidbody.MovePosition(new Vector2(myRigidbody.transform.position.x + 0.5f, myRigidbody.transform.position.y));
+            }
+            else {
+                // roll left
+                transform.localScale = new Vector2(-1f, 1f);
+                myRigidbody.MovePosition(new Vector2(myRigidbody.transform.position.x - 0.5f, myRigidbody.transform.position.y));                
+            }
+        }
+
+        if (playerController.isRolling) {
+            
+        }
+        #endregion
+
+        #region Blocking
+        if (playerController.canBlock)
+        {
+            if (Input.GetButton("Block")) {
+                playerController.isBlocking = true;
+                playerController.canMove = false;
+                playerController.canGroundAttack = false;
+                myAnim.SetBool("IsBlocking", true);
+            }
+            else if (Input.GetButtonUp("Block")) {
+                playerController.isBlocking = false;
+                playerController.canMove = true;
+                playerController.canGroundAttack = true;
+                myAnim.SetBool("IsBlocking", false);
+            }
+        }        
+        #endregion
+
+        
+
+
+        if (playerController.canMove) {
+            GetPlayerMovementControl();
+        }
+    }
+    
+    #region Movement Control
+    public void GetPlayerMovementControl() {
+        
 
         var dPadAxis = Input.GetAxis("DPadX");
         var horizontalAxis = Input.GetAxis("Horizontal");  
@@ -499,6 +549,14 @@ public class PlayerMovement : MonoBehaviour
             myRigidbody.velocity = new Vector2(speedDirection, myRigidbody.velocity.y);
         }
 
+    }
+    #endregion
+
+    #region Wait To Reactive DodgeRoll
+    public IEnumerator WaitToUnpauseDodgeRoll() {        
+        yield return new WaitForSeconds (0.25f);
+        playerController.isRolling = false;
+        playerController.isInInvincibleState = false;
     }
     #endregion
 }

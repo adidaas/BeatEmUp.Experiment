@@ -197,6 +197,9 @@ public class PlayerAudio : MonoBehaviour
             if (hurtType == (int)GeneralEnums.AttacksHurtType.Mid || hurtType == (int)GeneralEnums.AttacksHurtType.High) {
                 SoundEffectsManager.instance.RandomizeSfx(0.5f, soundRyuHurtLight0, soundRyuHurtMedium1, soundRyuHurtHard0);
             }
+            else if (hurtType == (int)GeneralEnums.AttacksHurtType.GuardCrush) {
+                SoundEffectsManager.instance.RandomizeSfx(0.5f, soundRyuHurtMedium1);
+            }
         }
     }
 }

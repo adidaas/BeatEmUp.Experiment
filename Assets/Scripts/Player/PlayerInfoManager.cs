@@ -31,7 +31,7 @@ public class PlayerInfoManager : MonoBehaviour {
 		}
 
 		if (currentGuardValue < 80) {
-			currentGuardValue += (0.8f * Time.deltaTime);
+			currentGuardValue += (1.5f * Time.deltaTime);
 		}
 	}
 

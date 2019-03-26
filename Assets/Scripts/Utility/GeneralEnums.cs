@@ -5,7 +5,7 @@ using UnityEngine;
 public class GeneralEnums : MonoBehaviour {    
 
 	public enum AttacksHurtType { 
-		High = 0, Mid = 1, Launch = 2, Air = 3, LaunchBack = 4, WallBounce = 5, Defeated = 6
+		High = 0, Mid = 1, Launch = 2, Air = 3, LaunchBack = 4, WallBounce = 5, Defeated = 6, GuardCrush = 7
 	}
 
 	public enum ScreenShakeType { 
@@ -29,6 +29,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string HurtGround { get { return "hurt_Ground"; } }
 		public static string HurtFalling { get { return "hurt_Falling"; } }
 		public static string HurtDefeated { get { return "hurt_Defeated"; } }		
+		public static string GuardCrush { get { return "guardCrush"; } }	
 	}
 
 	public static class GameObjectTags {
@@ -69,6 +70,7 @@ public class GeneralEnums : MonoBehaviour {
 		public static string AirFalling { get { return "air_Falling"; } }
 		public static string AirLanding { get { return "air_Landing"; } }
 		public static string CrouchToStanding { get { return "crouch_ToStanding"; } }
+		public static string MoveDodgeRoll { get { return "move_DodgeRoll"; } }
 	}
 
 	public enum PlayerCharacters {

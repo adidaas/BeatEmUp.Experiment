@@ -1,15 +1,12 @@
 fileFormatVersion: 2
-guid: 1bca52bd78adbe64285f7e33287583bd
+guid: c76d6e4a2aed41540a6323ea52c1c016
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Ryu_DodgeRoll_0
-    21300002: Ryu_DodgeRoll_1
-    21300004: Ryu_DodgeRoll_2
-    21300006: Ryu_DodgeRoll_3
-    21300008: Ryu_DodgeRoll_4
-    21300010: Ryu_DodgeRoll_5
-    21300012: Ryu_DodgeRoll_6
-    21300014: Ryu_DodgeRoll_7
+    21300000: Ryu_GuardCrush_0
+    21300002: Ryu_GuardCrush_1
+    21300004: Ryu_GuardCrush_2
+    21300006: Ryu_GuardCrush_3
+    21300008: Ryu_GuardCrush_4
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -68,21 +65,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 4096
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -92,13 +78,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ryu_DodgeRoll_0
+      name: Ryu_GuardCrush_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 140
-        height: 120
+        width: 115
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -106,19 +92,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed77d9b856745c74fbea00beff49e6eb
+      spriteID: 5d21507d9b4373e4d847be36ec3bc412
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ryu_DodgeRoll_1
+      name: Ryu_GuardCrush_1
       rect:
         serializedVersion: 2
-        x: 140
+        x: 115
         y: 0
-        width: 140
-        height: 120
+        width: 115
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -126,19 +112,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 13c5412a9aa2c2e419c3b835ccf61431
+      spriteID: 15c455e563f95344f8e4f1fd1d749f79
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ryu_DodgeRoll_2
+      name: Ryu_GuardCrush_2
       rect:
         serializedVersion: 2
-        x: 280
+        x: 230
         y: 0
-        width: 140
-        height: 120
+        width: 115
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,19 +132,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bbadf2a60dabf649b08456aeb4d8dd2
+      spriteID: 60c0a40d45780c644b32722a3b3aed29
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ryu_DodgeRoll_3
+      name: Ryu_GuardCrush_3
       rect:
         serializedVersion: 2
-        x: 420
+        x: 345
         y: 0
-        width: 140
-        height: 120
+        width: 115
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,19 +152,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eaa850c434ffb954890ae912fa98fca7
+      spriteID: 342c4130d6675a94fb3e9ad022666240
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ryu_DodgeRoll_4
+      name: Ryu_GuardCrush_4
       rect:
         serializedVersion: 2
-        x: 560
+        x: 460
         y: 0
-        width: 140
-        height: 120
+        width: 115
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,67 +172,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fbfa528a0831b544b875707a6cb488d
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ryu_DodgeRoll_5
-      rect:
-        serializedVersion: 2
-        x: 700
-        y: 0
-        width: 140
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1de23759666b1744587fe2f8b147c509
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ryu_DodgeRoll_6
-      rect:
-        serializedVersion: 2
-        x: 840
-        y: 0
-        width: 140
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 323574def92c1514dbef048fc0ea5f35
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ryu_DodgeRoll_7
-      rect:
-        serializedVersion: 2
-        x: 980
-        y: 0
-        width: 140
-        height: 120
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56bf3ebbebe9ead45922cb179b8190dc
+      spriteID: 534e0a13ab3a48d4195af2bf421b0d3d
       vertices: []
       indices: 
       edges: []
@@ -254,7 +180,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 7249675d6619875489f90a5dc460ea9f
+    spriteID: 710409e068991bb4a85bb25a7d15d759
     vertices: []
     indices: 
     edges: []

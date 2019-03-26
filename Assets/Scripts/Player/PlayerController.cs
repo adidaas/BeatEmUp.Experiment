@@ -46,17 +46,20 @@ public class PlayerController : MonoBehaviour {
 	public bool canGroundAttack;
 	public bool canAirAttack;
     public bool canDashAttack = false;
+    public bool canBlock = true;
     public bool isCornered = false;    
     public bool isAttacking = false;
     public bool isDashing;
     public bool isDashingRight;
     public bool isRunning;
+    public bool isRolling = false;
     public bool isJumping;
     public bool isFalling;
     public bool isBeingAirJuggle;
     public bool isAirJuggleable;
     public bool isInInvincibleState = false;
     public bool isBlocking = false;
+    public bool isGuardCrush = false;
     
     // button inputs
     // ==================================

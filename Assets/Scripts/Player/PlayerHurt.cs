@@ -29,15 +29,33 @@ public class PlayerHurt : MonoBehaviour
         myRigidbody = gameObject.GetComponent<Rigidbody2D>();
     }
 
-	public bool HitWhileBlocking(int damageValue) {
+	void Update() {
+		if (!playerController.canBlock && playerInfoManager.currentGuardValue > 0)
+		{
+			playerInfoManager.currentGuardValue = 40;
+			playerController.canBlock = true;
+		}
+	}
+
+	public float HitWhileBlocking(int damageValue) {
 		playerInfoManager.AdjustBlockValue(damageValue);
 
-		// if guardValue is below or equal to 0, than player has been guard crush. return false to play guard crush animation
+		// if guardValue is below or equal to 0, than player has been guard crush. return false to play guard crush collider
 		if (playerInfoManager.currentGuardValue <= 0) {
-			return false;
+			playerController.canBlock = false;
+			playerController.isBlocking = false;
+			playerController.isGuardCrush = true;
+			playerHurtType = (int)GeneralEnums.AttacksHurtType.GuardCrush;
+			
+			myAnim.SetTrigger(GeneralEnums.HurtTriggers.GuardCrush);
+			myAnim.SetBool("IsGuardCrush", true);
+			myAnim.SetBool("IsBlocking", false);
+			playerAudio.PlayHurtSound(playerController.playerCharacter, (int)GeneralEnums.AttacksHurtType.GuardCrush);
+
+			StartCoroutine(ToggleHurtWakeUp());
 		}
 		
-		return true;
+		return playerInfoManager.currentGuardValue;
 	}
 
     public void IsHit(int hurtType, float knockBackDistance, bool isEnemyFacingRight, float hitStop, int damageValue) {
@@ -151,7 +169,7 @@ public class PlayerHurt : MonoBehaviour
 
     public IEnumerator PerformHitStun(float hitStunTime, GeneralEnums.AttacksHurtType hurtType) {
 		yield return new WaitForSeconds(hitStunTime);	
-		print("hitstrun");
+
 		if (hurtType == GeneralEnums.AttacksHurtType.High) {
 			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtHighRecover);
 			playerController.canMove = true;
@@ -184,10 +202,19 @@ public class PlayerHurt : MonoBehaviour
 		{
 			elapsedTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
+		}
+
+		if (playerController.isGuardCrush)
+		{
+			myAnim.SetBool("IsGuardCrush", false);
+			playerController.isGuardCrush = false;
+		}
+		else
+		{
+			myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtWakeUp);
+			playerController.isInInvincibleState = false;
+			playerInfoManager.isInInvincibleState = false;
 		}		
-		myAnim.SetTrigger(GeneralEnums.HurtTriggers.HurtWakeUp);
-		playerController.isInInvincibleState = false;
-		playerInfoManager.isInInvincibleState = false;
 	}
 
 	private IEnumerator WaitToPlay(float duration, GeneralEnums.AttacksHurtType hurtType, bool isAnimationDone = false) {		
@@ -234,6 +261,9 @@ public class PlayerHurt : MonoBehaviour
 		}
 		if (hurtType == 5) {
 			return 0.24f;
+		}	
+		if (hurtType == 7) {
+			return 1.0f;
 		}	
 		return 3f;
 	}

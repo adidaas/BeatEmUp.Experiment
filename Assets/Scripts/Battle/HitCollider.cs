@@ -42,6 +42,13 @@ public class HitCollider : MonoBehaviour {
 	private int randomCount = 1;
 
 	private bool switchComboStyleSystem = true;	
+	[Range(0f, 1f)]
+    public float r = 1.0f;
+    [Range(0f, 1f)]
+    public float g = 1.0f;
+    [Range(0f, 1f)]
+    public float b = 1.0f;
+
 
 	#region Start
 	void Start () {
@@ -177,8 +184,9 @@ public class HitCollider : MonoBehaviour {
 
 			
 			if (playerController.isBlocking) {
+				var currentGuardValue = playerHurt.HitWhileBlocking(damageValue);
 				// if player is blocking and still has guard meter; no damage and play block effect
-				if (playerHurt.HitWhileBlocking(damageValue)) {
+				if (currentGuardValue > 0) {
 					// block spark
 					// =================================
 					Vector3 blockSparkSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
@@ -188,6 +196,14 @@ public class HitCollider : MonoBehaviour {
 
 					GameObject blockSparkInstance = Instantiate(hitSpark, blockSparkSpawnPosition, this.transform.rotation);
 					blockSparkInstance.layer = GeneralEnums.GameObjectLayer.SpecialEffects;
+
+					// if guard level is about to break; indicate it via a red block spark
+					if (currentGuardValue < 20) {
+						SpriteRenderer blockSparkSpriteRenderer = blockSparkInstance.GetComponent<SpriteRenderer>();
+						var redColor = new Color(0.65f, 0.5f, 0.65f, 1);
+						blockSparkSpriteRenderer.color = redColor;
+					}					
+
 					HitSparksController blockSparkController = blockSparkInstance.GetComponent<HitSparksController>();
 					blockSparkController.PlayBlockSpark(hitSparkType, parentEnemyController.isFacingRight);
 
@@ -198,7 +214,6 @@ public class HitCollider : MonoBehaviour {
 					yield break;
 				}
 				else {
-					print("GUARD CRUSH");
 					// guard meter is below 0; guard crush
 					Vector3 guardCrushSpawnPosition = other.gameObject.GetComponent<Collider2D>().bounds.ClosestPoint(transform.position);
 					guardCrushSpawnPosition.z = -1;
