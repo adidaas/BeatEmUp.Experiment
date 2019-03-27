@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D myRigidbody;
     private Animator myAnim;
     private CharacterEffectController characterEffectController;
+    private SpriteRenderer mySpriteRenderer;
 
     public GeneralEnums.MovementDirection previousMovementKey;
     public GeneralEnums.MovementDirection currentMovementKey;
@@ -26,17 +27,23 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator runEffectCoroutine;
 
-    // Start is called before the first frame update
+    [Range(0f, 1f)]
+    public float r = 1.0f;
+    [Range(0f, 1f)]
+    public float g = 1.0f;
+    [Range(0f, 1f)]
+    public float b = 1.0f;
+    
     void Start() {
         playerController = GetComponent<PlayerController>();
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         characterEffectController = GetComponent<CharacterEffectController>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
         
         runEffectCoroutine = RunEffect();
     }
 
-    // Update is called once per frame
     void Update() {
         if (playerController.isJumping) {
             if (!playerController.isFalling) {
@@ -190,19 +197,23 @@ public class PlayerMovement : MonoBehaviour
                 // roll right
                 playerController.isRolling = true;
                 playerController.isInInvincibleState = true;
+                playerController.canMove = false;
                 isRollingRight = true;
                 myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.MoveDodgeRoll);
                 transform.localScale = new Vector2(1f, 1f);
                 StartCoroutine(WaitToUnpauseDodgeRoll());
+                StartCoroutine(PlayDodgeRollFlash());
             }
             else if (playerController.inputLeft) {
                 // roll left
                 playerController.isRolling = true;
                 playerController.isInInvincibleState = true;
+                playerController.canMove = false;
                 isRollingRight = false;
                 myAnim.SetTrigger(GeneralEnums.MovementTriggerNames.MoveDodgeRoll);
                 transform.localScale = new Vector2(-1f, 1f);
                 StartCoroutine(WaitToUnpauseDodgeRoll());
+                StartCoroutine(PlayDodgeRollFlash());
             }
         }
 
@@ -219,9 +230,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerController.isRolling) {
-            
-        }
         #endregion
 
         #region Blocking
@@ -553,10 +561,25 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Wait To Reactive DodgeRoll
-    public IEnumerator WaitToUnpauseDodgeRoll() {        
-        yield return new WaitForSeconds (0.25f);
+    public IEnumerator WaitToUnpauseDodgeRoll() {
+        SoundEffectsManager.instance.PlayDodgeRollSound();
+        yield return new WaitForSeconds (0.28f);
         playerController.isRolling = false;
         playerController.isInInvincibleState = false;
+        playerController.canMove = true;
     }
     #endregion
+
+    public IEnumerator PlayDodgeRollFlash(float duration = 0.03f)
+    {
+        var originalColor = mySpriteRenderer.color;
+        while (duration >= 0f) {
+            duration -= 1 * Time.deltaTime;
+            var flashColor = new Color(r, g, b, 1);
+            mySpriteRenderer.color = flashColor;
+            yield return new WaitForSeconds(0.05f);
+            mySpriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
 }

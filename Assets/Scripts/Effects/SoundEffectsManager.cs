@@ -45,6 +45,9 @@ public class SoundEffectsManager : MonoBehaviour {
 	public AudioClip soundBlockBig1;
 	public AudioClip soundGuardCrush;
     public AudioClip soundExActivate;
+
+	public AudioClip soundDodgeRoll0;
+	public AudioClip soundDodgeRoll1;
 	public AudioClip[] swingSoundEffects;
 	public AudioClip[] hitSoundEffects;
 	public AudioClip[] blockSoundEffects;
@@ -151,6 +154,12 @@ public class SoundEffectsManager : MonoBehaviour {
 		int randomIndex = Random.Range(0, audioToPlay.Length);		
 		var clip = audioToPlay[randomIndex];
 		efxSource.PlayOneShot(clip, volume);
+	}
+
+	public void PlayDodgeRollSound() {
+		float volume = 0.4f;
+		efxSource.PlayOneShot(soundDodgeRoll0, volume);
+		efxSource.PlayOneShot(soundDodgeRoll1, volume);
 	}
 
 	public void RandomizePitch(ref AudioSource efxSource) {		
